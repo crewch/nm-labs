@@ -13,86 +13,104 @@ export const iterationSeidelTest = () => {
 	return { A, B }
 }
 
-function multiplyMatrixVector(matrix: IMatrix, vector: IVector): IVector {
-	return matrix.map(row =>
-		row.reduce((sum, val, idx) => sum + val * vector[idx], 0)
+function createAlphaAndBeta(
+	A: IMatrix,
+	b: IVector
+): { alpha: IMatrix; beta: IVector } {
+	const n = A.length
+	let alpha: IMatrix = Array.from({ length: n }, () => Array(n).fill(0))
+	let beta: IVector = Array(n)
+
+	for (let i = 0; i < n; i++) {
+		for (let j = 0; j < n; j++) {
+			if (i !== j) {
+				alpha[i][j] = -(A[i][j] / A[i][i])
+			}
+		}
+		beta[i] = b[i] / A[i][i]
+	}
+
+	return { alpha, beta }
+}
+
+function vectorNorm(vector: IVector): number {
+	return Math.sqrt(vector.reduce((sum, value) => sum + value * value, 0))
+}
+
+function matrixNorm(matrix: IMatrix): number {
+	return Math.max(
+		...matrix.map(row => row.reduce((sum, value) => sum + Math.abs(value), 0))
 	)
 }
 
-function subtractVectors(v1: IVector, v2: IVector): IVector {
-	return v1.map((val, idx) => val - v2[idx])
-}
-
-function vectorNorm(v: IVector): number {
-	return Math.sqrt(v.reduce((sum, val) => sum + val * val, 0))
+function multiplyMatrixVector(matrix: IMatrix, vector: IVector): IVector {
+	return matrix.map(row =>
+		row.reduce((sum, value, i) => sum + value * vector[i], 0)
+	)
 }
 
 function addVectors(v1: IVector, v2: IVector): IVector {
-	return v1.map((val, index) => val + v2[index])
+	return v1.map((value, i) => value + v2[i])
 }
 
-function getBaseLog(x: number, y: number) {
-	return Math.log(y) / Math.log(x)
+function subtractVectors(v1: IVector, v2: IVector): IVector {
+	return v1.map((value, i) => value - v2[i])
 }
-// TODO: переделать 2 метода как у Вани
+
 export function simpleIterationMethodDetailedOutput(
 	A: IMatrix,
 	b: IVector,
 	epsilon: number
 ) {
-	let x: IVector = new Array(b.length).fill(0)
-	let iterations = 0
-	let error: number
+	const { alpha, beta } = createAlphaAndBeta(A, b)
+	const normAlpha = matrixNorm(alpha)
+	const betaNorm = vectorNorm(beta)
 
-	const alpha: IMatrix = A.map((row, i) =>
-		row.map((value, j) => (i !== j ? +(-value / A[i][i]).toFixed(4) : 0))
-	)
-	const normAlpha = Math.max(
-		...alpha.map(row => row.reduce((a, b) => Math.abs(a) + Math.abs(b), 0))
-	)
+	let cond = normAlpha < 1
+	let estK =
+		(Math.log10(epsilon) - Math.log10(betaNorm) + Math.log10(1 - normAlpha)) /
+		Math.log10(normAlpha)
 
-	const beta: IVector = b.map((value, i) => +(value / A[i][i]).toFixed(4))
-	const normBeta = vectorNorm(beta)
+	let x: IVector = [...beta]
+	let prevX: IVector = [...beta]
+	let K = 0
+	let epsilonK = epsilon + 1
 
-	const iterationsRes = []
+	const iterations: { iteration: number; x: number[]; epsilonK: number }[] = []
+	while (epsilonK > epsilon) {
+		x = addVectors(beta, multiplyMatrixVector(alpha, prevX))
+		let coef = Math.pow(normAlpha, K) / (1 - normAlpha)
+		let normDiffXk = vectorNorm(subtractVectors(x, prevX))
+		epsilonK = cond ? coef * normDiffXk : normDiffXk
+		K++
 
-	do {
-		let nextX = addVectors(beta, multiplyMatrixVector(alpha, x))
-		error = vectorNorm(subtractVectors(nextX, x))
-		if (error < epsilon) break
-		x = nextX
+		iterations.push({
+			iteration: K,
+			x: x.map(value => Math.round(value * 1000) / 1000),
+			epsilonK,
+		})
 
-		iterationsRes.push(
-			`x^(${iterations + 1}) = [${x.map(xi => xi.toFixed(3)).join(', ')}]^T`
-		)
-		// iterationsRes.push(
-		// 	`x^(${iterations + 1}) = [${x
-		// 		.map(xi => xi.toFixed(3))
-		// 		.join(', ')}]^T, epsilon^(${iterations + 1}) = ${error.toFixed(
-		// 		6
-		// 	)} > ${epsilon.toFixed(6)}`
-		// )
+		if (K > estK) {
+			break
+		}
 
-		iterations++
-	} while (true)
-
-	const K =
-		(getBaseLog(10, epsilon) -
-			getBaseLog(10, normBeta) +
-			getBaseLog(10, 1 - normAlpha)) /
-		getBaseLog(10, normAlpha)
+		prevX = [...x]
+	}
 
 	return {
 		alpha,
 		beta,
 		normAlpha,
 		epsilon,
+		condition: cond,
+		x: x.map(value => Math.round(value * 1000) / 1000),
+		estIterations: Math.floor(estK),
 		iterations,
-		iterationsRes,
-		x,
-		K,
+		iterationsCount: iterations.length,
 	}
 }
+
+///////////////////////////
 
 const createZeroMatrix = (rows: number, cols: number): IMatrix => {
 	return Array.from({ length: rows }, () => Array(cols).fill(0))
@@ -166,7 +184,7 @@ const formatSeidelIteration = (
 ): string => {
 	let formattedString = `x^(${iteration}) = (`
 	formattedString += x.map(xi => xi.toFixed(3)).join(', ') + ')^T'
-	// formattedString += `, epsilon^(${iteration}) = ${epsilonValue.toFixed(10)}`
+	formattedString += `, epsilon^(${iteration}) = ${epsilonValue.toFixed(10)}`
 	return formattedString
 }
 
@@ -184,7 +202,6 @@ const calculateAPrioriEstimate = (
 	return Math.ceil(Math.log(epsilon / normGamma) / Math.log(normAlpha)) + 1
 }
 
-// TODO: переделать 2 метода как у Вани
 export const prepareSeidel = (A: IMatrix, b: IVector, epsilon: number) => {
 	const n = A.length
 	let B = createZeroMatrix(n, n)

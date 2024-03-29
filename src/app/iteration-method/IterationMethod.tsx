@@ -30,10 +30,15 @@ const IterationMethod = () => {
 		beta: IVector
 		normAlpha: number
 		epsilon: number
-		iterations: number
-		x: IVector
-		K: number
-		iterationsRes: string[]
+		condition: boolean
+		x: number[]
+		estIterations: number
+		iterations: {
+			iteration: number
+			x: number[]
+			epsilonK: number
+		}[]
+		iterationsCount: number
 	} | null>(null)
 
 	const handleSolve = () => {

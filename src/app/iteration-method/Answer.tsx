@@ -8,14 +8,29 @@ interface IAnswer {
 	beta: IVector
 	normAlpha: number
 	epsilon: number
-	iterations: number
-	iterationsRes: string[]
-	x: IVector
-	K: number
+	condition: boolean
+	x: number[]
+	estIterations: number
+	iterations: {
+		iteration: number
+		x: number[]
+		epsilonK: number
+	}[]
+	iterationsCount: number
 }
 
 const Answer = ({
-	answer: { alpha, beta, epsilon, normAlpha, iterations, K, x, iterationsRes },
+	answer: {
+		alpha,
+		beta,
+		epsilon,
+		normAlpha,
+		iterations,
+		x,
+		condition,
+		estIterations,
+		iterationsCount,
+	},
 }: {
 	answer: IAnswer
 }) => {
@@ -24,19 +39,25 @@ const Answer = ({
 			<Matrix matrix={alpha} label='Matrix alpha:' />
 			<Vector vector={beta} label='Vector beta:' />
 			<p>||alpha|| = {normAlpha.toFixed(3)}</p>
-			<p>The sufficient convergence condition is satisfied.</p>
+			{condition ? (
+				<p>The sufficient convergence condition is satisfied.</p>
+			) : (
+				<p>The sufficient convergence condition is not satisfied.</p>
+			)}
 			<p>Epsilon = {epsilon.toFixed(3)}</p>
-			<p>Starting iterations...</p>
 			<div>
-				{iterationsRes.map(resStr => (
-					<p key={resStr}>{resStr}</p>
+				{iterations.map(resStr => (
+					<p key={resStr.epsilonK}>
+						x^({resStr.iteration}) = ({resStr.x.map(num => ` ${num} `)})^T,
+						epsilon^({resStr.iteration}) = {resStr.epsilonK}
+					</p>
 				))}
 			</div>
 			<Vector vector={x} label='Vector x (answer):' />
-			<p>Number of iterations: {iterations}</p>
+			<p>Number of iterations: {iterationsCount}</p>
 			<p>
-				A priori estimate of the number of iterations: K + 1 {'> '}
-				{K.toFixed(6)}
+				A priori estimate of the number of iterations: K + 1 {'>= '}
+				{estIterations}
 			</p>
 		</div>
 	)
