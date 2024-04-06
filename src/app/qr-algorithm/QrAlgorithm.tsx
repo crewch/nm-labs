@@ -11,7 +11,7 @@ import { ParamsContext } from '@/context/ParamsContextProvider'
 import { useContext, useState } from 'react'
 import Answer from './Answer'
 import { clearMatrixAndVector } from '@/utils/clearMatrixAndVector'
-import { qrTest } from '@/tests/qr-algorithm.test'
+import { runQRAlgorithm, qrTest } from '@/tests/qr-algorithm.test'
 import { matrixToMatrixStr } from '@/utils/matrixToMatrixStr'
 import { vectorToVectorStr } from '@/utils/vectorToVectorStr'
 import { matrixToMatrixNum } from '@/utils/matrixToMatrixNum'
@@ -39,6 +39,8 @@ const QrAlgorithm = () => {
 		const { A, B } = qrTest()
 		setMatrix(matrixToMatrixStr(A))
 		setVector(vectorToVectorStr(B))
+		console.log(runQRAlgorithm(A, +params.eps))
+
 		// const result =
 		// setAnswer(result)
 	}

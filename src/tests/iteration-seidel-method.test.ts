@@ -250,7 +250,7 @@ export const prepareSeidel = (A: IMatrix, b: IVector, epsilon: number) => {
 	while (!converge) {
 		iterations++
 		let x_new: IVector = [...x]
-		let maxDiff = 0
+		let diffVector = Array(n).fill(0)
 
 		for (let i = 0; i < n; i++) {
 			let sum1 = 0
@@ -262,9 +262,12 @@ export const prepareSeidel = (A: IMatrix, b: IVector, epsilon: number) => {
 				sum2 += A[i][j] * x[j]
 			}
 			x_new[i] = (b[i] - sum1 - sum2) / A[i][i]
-			maxDiff = Math.max(maxDiff, Math.abs(x_new[i] - x[i]))
+			diffVector[i] = x_new[i] - x[i]
 		}
 
+		const maxDiff = Math.sqrt(
+			diffVector.reduce((sum, value) => sum + value * value, 0)
+		)
 		converge = maxDiff < epsilon
 		x = x_new
 
