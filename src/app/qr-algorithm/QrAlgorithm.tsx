@@ -21,16 +21,16 @@ const QrAlgorithm = () => {
 	const { vector, setVector } = useContext(VectorContext)
 	const { params, setParams } = useContext(ParamsContext)
 	const [show, setShow] = useState<'test' | 'solve' | 'no'>('no')
-	const [answer, setAnswer] = useState<{} | null>(null)
+	const [answer, setAnswer] = useState<{
+		answer: (string | IMatrix | IVector)[]
+	} | null>(null)
 
 	const handleSolve = () => {
 		setShow('solve')
 		const { A } = {
 			A: matrixToMatrixNum(matrix),
 		}
-
-		// const result =
-		// setAnswer(result)
+		setAnswer({ answer: runQRAlgorithm(A, +params.eps) })
 	}
 
 	const handleTest = () => {
@@ -39,10 +39,7 @@ const QrAlgorithm = () => {
 		const { A, B } = qrTest()
 		setMatrix(matrixToMatrixStr(A))
 		setVector(vectorToVectorStr(B))
-		console.log(runQRAlgorithm(A, +params.eps))
-
-		// const result =
-		// setAnswer(result)
+		setAnswer({ answer: runQRAlgorithm(A, +params.eps) })
 	}
 
 	const handleClear = () => {
