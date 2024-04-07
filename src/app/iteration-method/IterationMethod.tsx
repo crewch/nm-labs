@@ -10,7 +10,7 @@ import {
 import { ParamsContext } from '@/context/ParamsContextProvider'
 import {
 	iterationSeidelTest,
-	simpleIterationMethodDetailedOutput,
+	simpleIterationMethod,
 } from '@/tests/iteration-seidel-method.test'
 import { clearMatrixAndVector } from '@/utils/clearMatrixAndVector'
 import { matrixToMatrixNum } from '@/utils/matrixToMatrixNum'
@@ -47,7 +47,7 @@ const IterationMethod = () => {
 			A: matrixToMatrixNum(matrix),
 			B: vectorToVectorNum(vector),
 		}
-		const result = simpleIterationMethodDetailedOutput(A, B, +params.eps)
+		const result = simpleIterationMethod(A, B, +params.eps)
 		setAnswer(result)
 	}
 
@@ -57,7 +57,7 @@ const IterationMethod = () => {
 		const { A, B } = iterationSeidelTest()
 		setMatrix(matrixToMatrixStr(A))
 		setVector(vectorToVectorStr(B))
-		const result = simpleIterationMethodDetailedOutput(A, B, +params.eps)
+		const result = simpleIterationMethod(A, B, +params.eps)
 		setAnswer(result)
 	}
 

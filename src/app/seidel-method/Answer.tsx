@@ -8,7 +8,7 @@ interface IAnswer {
 	C: IMatrix
 	alpha: IMatrix
 	normAlpha: number
-	beta: any[]
+	beta: IVector
 	gamma: IVector
 	epsilon: number
 	x: IVector
@@ -42,7 +42,11 @@ const Answer = ({
 			<Vector vector={beta} label='Vector beta:' />
 			<Vector vector={gamma} label='Vector gamma = (E - B)^(-1)beta:' />
 			<p>||alpha|| = {normAlpha}</p>
-			<p>The sufficient convergence condition is satisfied</p>
+			{normAlpha >= 1 ? (
+				<p>The sufficient convergence condition is not met</p>
+			) : (
+				<p>The sufficient convergence condition is satisfied</p>
+			)}
 			<p>Epsilon = {epsilon}</p>
 			<div>
 				{iterationDetails.map(row => (
