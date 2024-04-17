@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import {
 	IMatrix,
 	IVector,
+	IVectorStr,
 	MatrixContext,
 	VectorContext,
 } from '@/context/MatrixAndVectorContextProvider'
@@ -22,7 +23,7 @@ const QrAlgorithm = () => {
 	const { params, setParams } = useContext(ParamsContext)
 	const [show, setShow] = useState<'test' | 'solve' | 'no'>('no')
 	const [answer, setAnswer] = useState<{
-		answer: (string | IMatrix | IVector)[]
+		answer: (string | IMatrix | IVector | IVectorStr)[]
 	} | null>(null)
 
 	const handleSolve = () => {

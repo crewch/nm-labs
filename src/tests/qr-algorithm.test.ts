@@ -1,4 +1,9 @@
-import { IMatrix, IVector } from '@/context/MatrixAndVectorContextProvider'
+import {
+	IMatrix,
+	IVector,
+	IVectorStr,
+} from '@/context/MatrixAndVectorContextProvider'
+import { roundTo } from '@/utils/roundTo'
 
 export const qrTest = () => {
 	const A: IMatrix = [
@@ -135,8 +140,8 @@ function absComplex([a, b]: Complex): number {
 // Функция для преобразования комплексного числа в строку
 function complexToString([real, imag]: Complex): string {
 	// Возвращаем строку в зависимости от наличия мнимой части
-	if (imag === 0) return real.toString()
-	return `${real} + ${imag}i`
+	if (imag === 0) return roundTo(real).toString()
+	return `${roundTo(real)} + ${roundTo(imag)}i`
 }
 
 // Функция для выполнения QR-алгоритма
@@ -151,7 +156,7 @@ export function runQRAlgorithm(A: IMatrix, epsilon: number) {
 	// Флаг для определения сходимости
 	let flag: boolean
 	// Строка для хранения результатов
-	let res: (string | IMatrix | IVector)[] = []
+	let res: (string | IMatrix | IVector | IVectorStr)[] = []
 
 	// Цикл, выполняющийся до сходимости
 	do {
@@ -220,11 +225,12 @@ export function runQRAlgorithm(A: IMatrix, epsilon: number) {
 
 	// Добавление в результат списка собственных значений
 	res.push('Eigenvalues:')
-	const eigenvalueAns: IVector = []
+	const eigenvalueAns: IVectorStr = []
 	for (const eigenvalue of prev) {
-		eigenvalueAns.push(+complexToString(eigenvalue))
+		eigenvalueAns.push(complexToString(eigenvalue))
 	}
 	res.push(eigenvalueAns)
+
 	// Добавление общего количества итераций в результат
 	res.push('Total Iterations:', `${iter}`)
 	// Включаем в строку `res` итоговые результаты и собственные значения
