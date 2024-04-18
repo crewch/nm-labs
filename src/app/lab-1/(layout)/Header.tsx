@@ -5,6 +5,9 @@ const Header = () => {
 	return (
 		<header className='flex justify-center gap-5'>
 			<Button asChild variant={'link'}>
+				<Link href={'/'}>Home</Link>
+			</Button>
+			<Button asChild variant={'link'}>
 				<Link href={'lu-decomposition'}>LU-decomposition</Link>
 			</Button>
 			<Button asChild variant={'link'}>
