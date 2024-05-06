@@ -53,6 +53,7 @@ export const lab21 = () => {
 
 	const dfA: number = df(a)
 	const dfB: number = df(b)
+
 	const signOfDfA: number = sign(dfA)
 
 	const lambdaValue: number = signOfDfA / Math.max(Math.abs(dfA), Math.abs(dfB))
