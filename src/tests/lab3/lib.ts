@@ -375,11 +375,8 @@ export interface Task1Args {
 	xStar: number
 }
 
-type MatrixTuple = [number, number]
-
 export class Matrix {
 	private buffer: number[][]
-	private swapped: MatrixTuple[] = []
 
 	constructor(n?: number, m?: number) {
 		if (n !== undefined && m !== undefined) {
@@ -399,6 +396,18 @@ export class Matrix {
 		const cloned = new Matrix()
 		cloned.buffer = this.buffer.map(row => [...row])
 		return cloned
+	}
+
+	public transpose(): Matrix {
+		const n = this.rows
+		const m = this.cols
+		const res = new Matrix(m, n)
+		for (let i = 0; i < n; i++) {
+			for (let j = 0; j < m; j++) {
+				res.set(j, i, this.buffer[i][j])
+			}
+		}
+		return res
 	}
 
 	public get rows(): number {
@@ -431,6 +440,43 @@ export class Matrix {
 				this.buffer[i][j] *= coef
 			}
 		}
+	}
+
+	public static multiplyMM(A: Matrix, B: Matrix): Matrix {
+		if (A.cols !== B.rows) {
+			throw new Error(
+				'Columns of A must match rows of B to perform multiplication.'
+			)
+		}
+
+		const res = new Matrix(A.rows, B.cols)
+		for (let i = 0; i < A.rows; i++) {
+			for (let j = 0; j < B.cols; j++) {
+				let sum = 0
+				for (let k = 0; k < B.rows; k++) {
+					sum += A.get(i, k) * B.get(k, j)
+				}
+				res.set(i, j, sum)
+			}
+		}
+		return res
+	}
+
+	public static multiplyMV(A: Matrix, B: Vector): Vector {
+		if (A.cols !== B.rows) {
+			throw new Error(
+				'Matrix and Vector dimensions do not match for multiplication.'
+			)
+		}
+		const res = new Vector(A.rows)
+		for (let i = 0; i < A.rows; i++) {
+			let sum = 0
+			for (let k = 0; k < B.rows; k++) {
+				sum += A.get(i, k) * B.get(k)
+			}
+			res.set(i, sum)
+		}
+		return res
 	}
 
 	public swapRows(first: number, second: number): void {
@@ -484,10 +530,6 @@ export class Vector {
 
 	public getBuffer(): number[] {
 		return this.buffer
-	}
-
-	public setBuffer(vector: number[]) {
-		this.buffer = vector
 	}
 
 	public clone(): Vector {

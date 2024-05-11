@@ -183,9 +183,6 @@ const MainPage = () => {
 						<pre>{answer.result}</pre>
 						<Line
 							data={{
-								labels: Array.from({ length: 100 }).map(
-									(_, i) => -0.4 + i * 0.012
-								),
 								datasets: answer.splines.polynomials.map((poly, index) => {
 									const start = answer.splines.points[index]
 									const end = answer.splines.points[index + 1]
