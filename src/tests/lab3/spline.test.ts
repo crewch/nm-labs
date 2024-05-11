@@ -30,7 +30,7 @@ export class Task2 {
 		)}${ci.padEnd(pad)}${di.padEnd(pad)}\n`
 	}
 
-	public run(): [string, CubicSpline] {
+	public run(): [string, { polynomials: number[][]; points: number[] }] {
 		let res = ''
 		const n = this.X.length - 1
 		const a = new Vector(n)
@@ -120,6 +120,14 @@ export class Task2 {
 		res += `\n${spline.toString()}\n${spline
 			.calculate(this.xStar)
 			.toFixed(6)}\n`
-		return [res, spline]
+
+		const splineRes = spline.getCubicSpline()
+		return [
+			res,
+			{
+				points: splineRes.points,
+				polynomials: splineRes.polynomials.map(item => item.getCoefficients()),
+			},
+		]
 	}
 }

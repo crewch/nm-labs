@@ -20,7 +20,7 @@ const Tma = () => {
 	const { matrix, setMatrix } = useContext(MatrixContext)
 	const { vector, setVector } = useContext(VectorContext)
 	const { params, setParams } = useContext(ParamsContext)
-	const [show, setShow] = useState<'test' | 'solve' | 'no'>('no')
+	const [show, setShow] = useState<'solve' | 'no'>('no')
 	const [answer, setAnswer] = useState<{
 		x: IVector
 		p: IVector
@@ -39,7 +39,7 @@ const Tma = () => {
 	}
 
 	const handleTest = () => {
-		setShow('test')
+		setShow('solve')
 		setParams({ ...params, n: '5' })
 
 		const { A, B } = tmaTest()
@@ -66,10 +66,7 @@ const Tma = () => {
 				<Button onClick={handleTest}>Test</Button>
 				<Button onClick={handleClear}>Clear</Button>
 			</div>
-			<div>
-				{show === 'test' && answer && <Answer answer={answer} />}
-				{show === 'solve' && answer && <Answer answer={answer} />}
-			</div>
+			<div>{show === 'solve' && answer && <Answer answer={answer} />}</div>
 		</div>
 	)
 }

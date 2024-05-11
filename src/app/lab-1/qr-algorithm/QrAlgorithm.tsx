@@ -21,7 +21,7 @@ const QrAlgorithm = () => {
 	const { matrix, setMatrix } = useContext(MatrixContext)
 	const { vector, setVector } = useContext(VectorContext)
 	const { params, setParams } = useContext(ParamsContext)
-	const [show, setShow] = useState<'test' | 'solve' | 'no'>('no')
+	const [show, setShow] = useState<'solve' | 'no'>('no')
 	const [answer, setAnswer] = useState<{
 		answer: (string | IMatrix | IVector | IVectorStr)[]
 	} | null>(null)
@@ -35,7 +35,7 @@ const QrAlgorithm = () => {
 	}
 
 	const handleTest = () => {
-		setShow('test')
+		setShow('solve')
 		setParams({ ...params, n: '3' })
 		const { A, B } = qrTest()
 		setMatrix(matrixToMatrixStr(A))
@@ -60,10 +60,7 @@ const QrAlgorithm = () => {
 				<Button onClick={handleTest}>Test</Button>
 				<Button onClick={handleClear}>Clear</Button>
 			</div>
-			<div>
-				{show === 'test' && answer && <Answer answer={answer} />}
-				{show === 'solve' && answer && <Answer answer={answer} />}
-			</div>
+			<div>{show === 'solve' && answer && <Answer answer={answer} />}</div>
 		</div>
 	)
 }

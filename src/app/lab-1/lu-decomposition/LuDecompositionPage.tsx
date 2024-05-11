@@ -29,7 +29,7 @@ const LuDecompositionPage = () => {
 	const { matrix, setMatrix } = useContext(MatrixContext)
 	const { vector, setVector } = useContext(VectorContext)
 	const { params, setParams } = useContext(ParamsContext)
-	const [show, setShow] = useState<'test' | 'solve' | 'no'>('no')
+	const [show, setShow] = useState<'solve' | 'no'>('no')
 	const [answer, setAnswer] = useState<{
 		det: number
 		inverse: IMatrix
@@ -66,7 +66,7 @@ const LuDecompositionPage = () => {
 	}
 
 	const handleTest = () => {
-		setShow('test')
+		setShow('solve')
 		setParams({ ...params, n: '4' })
 
 		const { A, B } = luTest()
@@ -107,10 +107,7 @@ const LuDecompositionPage = () => {
 				<Button onClick={handleTest}>Test</Button>
 				<Button onClick={handleClear}>Clear</Button>
 			</div>
-			<div>
-				{show === 'test' && answer && <Answer answer={answer} />}
-				{show === 'solve' && answer && <Answer answer={answer} />}
-			</div>
+			<div>{show === 'solve' && answer && <Answer answer={answer} />}</div>
 		</div>
 	)
 }

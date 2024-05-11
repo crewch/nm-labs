@@ -310,6 +310,10 @@ export class Polynomial {
 		return this.coefficients.length
 	}
 
+	public getCoefficients() {
+		return this.coefficients
+	}
+
 	public getCoefficient(index: number): number {
 		return this.coefficients[index]
 	}
@@ -581,6 +585,10 @@ export class CubicSpline {
 			else high = mid - 1
 		}
 		return low
+	}
+
+	public getCubicSpline() {
+		return { polynomials: this.polynomials, points: this.points }
 	}
 
 	toString(): string {

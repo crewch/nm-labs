@@ -11,7 +11,7 @@ const MainPage = () => {
 	const [xStar, setXStar] = useState(0.1)
 	const [y, setY] = useState('')
 	const [x, setX] = useState<string[]>(['0', '0', '0', '0'])
-	const [show, setShow] = useState<'test' | 'solve' | 'no'>('no')
+	const [show, setShow] = useState<'solve' | 'no'>('no')
 	const [answer, setAnswer] = useState<string | null>(null)
 
 	const handleSolve = () => {
@@ -20,7 +20,7 @@ const MainPage = () => {
 	}
 
 	const handleTest = () => {
-		setShow('test')
+		setShow('solve')
 		setN(4)
 		setXStar(0.1)
 		setY('arccos(x)')
@@ -117,7 +117,6 @@ const MainPage = () => {
 				</div>
 			</section>
 			<div className='flex justify-center'>
-				{show === 'test' && answer && <pre>{answer}</pre>}
 				{show === 'solve' && answer && <pre>{answer}</pre>}
 			</div>
 		</div>
