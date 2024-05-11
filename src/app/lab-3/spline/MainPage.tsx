@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
+import { Task2 } from '@/tests/lab3/spline.test'
 
 const MainPage = () => {
 	const [n, setN] = useState(4)
@@ -15,17 +16,26 @@ const MainPage = () => {
 
 	const handleSolve = () => {
 		setShow('solve')
+		const task = new Task2(x.map(Number), f.map(Number), xStar)
+		const [result, splines] = task.run()
+		setAnswer(result)
 	}
 
 	const handleTest = () => {
 		setShow('test')
+		const testXStar = 0.1
+		const testX = ['-0.4', '-0.1', '0.2', '0.5', '0.8']
+		const testF = ['1.9823', '1.6710', '1.3694', '1.0472', '0.64350']
+
 		setN(4)
-		// setXStar(0.1)
-		// setX(['-0.4', '-0.1', '0.2', '0.5', '0.8'])
-		// setF(['1.9823', '1.6710', '1.3694', '1.0472', '0.64350'])
-		setXStar(-0.5)
-		setX(['-2', '-1', '0', '1', '2'])
-		setF(['-1.8467', '-0.63212', '1', '3.7183', '9.3891'])
+		setXStar(testXStar)
+		setX(testX)
+		setF(testF)
+
+		const task = new Task2(testX.map(Number), testF.map(Number), testXStar)
+		const [result, splines] = task.run()
+		console.log(splines)
+		setAnswer(result)
 	}
 
 	const handleClear = () => {

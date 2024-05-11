@@ -321,6 +321,7 @@ export class Polynomial {
 			result += currentPower * coefficient
 			currentPower *= x
 		}
+
 		return result
 	}
 
@@ -384,6 +385,10 @@ export class Matrix {
 		} else {
 			this.buffer = []
 		}
+	}
+
+	public getBuffer(): number[][] {
+		return this.buffer
 	}
 
 	public clone(): Matrix {
@@ -453,69 +458,6 @@ export class Matrix {
 		return max
 	}
 
-	public luDecompose(): {
-		L: Matrix
-		U: Matrix
-		solve: (b: Vector) => Vector
-	} {
-		const n = this.rows
-		const L = new Matrix(n, n)
-		const U = new Matrix(n, n)
-
-		for (let i = 0; i < n; i++) {
-			L.set(i, i, 1) // Set diagonal as 1 for L
-		}
-
-		for (let i = 0; i < n; i++) {
-			for (let k = i; k < n; k++) {
-				let sum = 0
-				for (let j = 0; j < i; j++) {
-					sum += L.get(i, j) * U.get(j, k)
-				}
-				U.set(i, k, this.get(i, k) - sum)
-			}
-
-			for (let k = i + 1; k < n; k++) {
-				let sum = 0
-				for (let j = 0; j < i; j++) {
-					sum += L.get(k, j) * U.get(j, i)
-				}
-				L.set(k, i, (this.get(k, i) - sum) / U.get(i, i))
-			}
-		}
-
-		// Solve method for Ax = b using LU decomposition
-		return {
-			L,
-			U,
-			solve: (b: Vector) => {
-				// Forward substitution to solve Ly = b
-				let y = new Vector(n)
-				for (let i = 0; i < n; i++) {
-					let sum = 0
-					for (let j = 0; j < i; j++) {
-						sum += L.get(i, j) * y.get(j)
-					}
-					y.set(i, b.get(i) - sum)
-				}
-
-				// Back substitution to solve Ux = y
-				let x = new Vector(n)
-				for (let i = n - 1; i >= 0; i--) {
-					let sum = 0
-					for (let j = i + 1; j < n; j++) {
-						sum += U.get(i, j) * x.get(j)
-					}
-					if (U.get(i, i) === 0) {
-						throw new Error('Matrix is singular and cannot be solved.')
-					}
-					x.set(i, (y.get(i) - sum) / U.get(i, i))
-				}
-				return x
-			},
-		}
-	}
-
 	public toString(): string {
 		return this.buffer
 			.map(row => row.map(value => value.toFixed(4).padEnd(10)).join(''))
@@ -534,6 +476,14 @@ export class Vector {
 		} else {
 			this.buffer = []
 		}
+	}
+
+	public getBuffer(): number[] {
+		return this.buffer
+	}
+
+	public setBuffer(vector: number[]) {
+		this.buffer = vector
 	}
 
 	public clone(): Vector {
@@ -596,5 +546,51 @@ export class Vector {
 
 	public toString(): string {
 		return this.buffer.map(x => x.toFixed(4).padEnd(18)).join('')
+	}
+}
+
+export class CubicSpline {
+	private readonly polynomials: Polynomial[]
+	private readonly points: number[]
+
+	constructor(points: number[], polynomials: Polynomial[]) {
+		this.polynomials = polynomials
+		this.points = points
+	}
+
+	size(): number {
+		return this.polynomials.length
+	}
+
+	calculate(x: number): number {
+		let idx = this.findClosestPointIndex(x)
+		idx = Math.min(idx, this.points.length - 1) - 1
+		idx = Math.max(0, idx)
+
+		return this.polynomials[idx].calculate(x)
+	}
+
+	private findClosestPointIndex(x: number): number {
+		let low = 0,
+			high = this.points.length - 1,
+			mid
+		while (low <= high) {
+			mid = Math.floor((low + high) / 2)
+			if (this.points[mid] === x) return mid
+			else if (this.points[mid] < x) low = mid + 1
+			else high = mid - 1
+		}
+		return low
+	}
+
+	toString(): string {
+		let res = ''
+		for (let i = 0; i < this.polynomials.length; i++) {
+			res += `[${this.points[i]}; ${this.points[i + 1]}] ${
+				this.polynomials[i]
+			}\n`
+		}
+
+		return res
 	}
 }
