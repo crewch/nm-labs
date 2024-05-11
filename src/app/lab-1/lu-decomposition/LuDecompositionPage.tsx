@@ -15,7 +15,7 @@ import {
 	multiplyMatrices,
 	separateLU,
 	solveLU,
-} from '@/tests/lu-decomposition.test'
+} from '@/tests/lab1/lu-decomposition.test'
 import { clearMatrixAndVector } from '@/utils/clearMatrixAndVector'
 import { matrixToMatrixNum } from '@/utils/matrixToMatrixNum'
 import { matrixToMatrixStr } from '@/utils/matrixToMatrixStr'

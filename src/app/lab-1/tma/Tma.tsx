@@ -7,7 +7,7 @@ import {
 	VectorContext,
 } from '@/context/MatrixAndVectorContextProvider'
 import { ParamsContext } from '@/context/ParamsContextProvider'
-import { thomasAlgorithm, tmaTest } from '@/tests/tma.test'
+import { thomasAlgorithm, tmaTest } from '@/tests/lab1/tma.test'
 import { clearMatrixAndVector } from '@/utils/clearMatrixAndVector'
 import { matrixToMatrixNum } from '@/utils/matrixToMatrixNum'
 import { matrixToMatrixStr } from '@/utils/matrixToMatrixStr'

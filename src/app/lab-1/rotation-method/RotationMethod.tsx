@@ -9,13 +9,12 @@ import {
 } from '@/context/MatrixAndVectorContextProvider'
 import { clearMatrixAndVector } from '@/utils/clearMatrixAndVector'
 import { matrixToMatrixNum } from '@/utils/matrixToMatrixNum'
-import { vectorToVectorNum } from '@/utils/vectorToVectorNum'
 import { useContext, useState } from 'react'
 import Answer from './Answer'
 import { matrixToMatrixStr } from '@/utils/matrixToMatrixStr'
 import { vectorToVectorStr } from '@/utils/vectorToVectorStr'
 import { ParamsContext } from '@/context/ParamsContextProvider'
-import { jacobiMethod, rotationTest } from '@/tests/rotation-method.test'
+import { jacobiMethod, rotationTest } from '@/tests/lab1/rotation-method.test'
 
 const RotationMethod = () => {
 	const { matrix, setMatrix } = useContext(MatrixContext)

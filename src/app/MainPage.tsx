@@ -17,7 +17,7 @@ const MainPage = () => {
 				</Button>
 				<Separator orientation='vertical' />
 				<Button asChild variant={'link'} className='text-2xl'>
-					<Link href={'lab-3/'}>Lab 3</Link>
+					<Link href={'lab-3/interpolation'}>Lab 3</Link>
 				</Button>
 				<Separator orientation='vertical' />
 				<Button asChild variant={'link'} className='text-2xl'>

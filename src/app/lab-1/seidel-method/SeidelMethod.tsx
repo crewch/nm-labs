@@ -11,7 +11,7 @@ import { ParamsContext } from '@/context/ParamsContextProvider'
 import {
 	iterationSeidelTest,
 	prepareSeidel,
-} from '@/tests/iteration-seidel-method.test'
+} from '@/tests/lab1/iteration-seidel-method.test'
 import { clearMatrixAndVector } from '@/utils/clearMatrixAndVector'
 import { matrixToMatrixNum } from '@/utils/matrixToMatrixNum'
 import { matrixToMatrixStr } from '@/utils/matrixToMatrixStr'

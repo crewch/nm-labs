@@ -1,6 +1,6 @@
 'use client'
 
-import { lab22 } from '@/tests/lab2.2.test'
+import { lab22 } from '@/tests/lab2/lab2.2.test'
 import { useMemo } from 'react'
 
 const MainPage = () => {

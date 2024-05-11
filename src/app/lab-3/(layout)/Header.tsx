@@ -8,10 +8,19 @@ const Header = () => {
 				<Link href={'/'}>Home</Link>
 			</Button>
 			<Button asChild variant={'link'}>
-				<Link href={'1'}>1</Link>
+				<Link href={'interpolation'}>interpolation</Link>
 			</Button>
 			<Button asChild variant={'link'}>
-				<Link href={'2'}>2</Link>
+				<Link href={'spline'}>spline</Link>
+			</Button>
+			<Button asChild variant={'link'}>
+				<Link href={'lsm'}>lsm</Link>
+			</Button>
+			<Button asChild variant={'link'}>
+				<Link href={'derivative'}>derivative</Link>
+			</Button>
+			<Button asChild variant={'link'}>
+				<Link href={'integrate'}>integrate</Link>
 			</Button>
 		</header>
 	)
