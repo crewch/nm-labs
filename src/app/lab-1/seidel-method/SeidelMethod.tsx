@@ -24,7 +24,6 @@ const SeidelMethod = () => {
 	const { matrix, setMatrix } = useContext(MatrixContext)
 	const { vector, setVector } = useContext(VectorContext)
 	const { params, setParams } = useContext(ParamsContext)
-	const [show, setShow] = useState<'solve' | 'no'>('no')
 	const [answer, setAnswer] = useState<{
 		B: IMatrix
 		C: IMatrix
@@ -40,7 +39,6 @@ const SeidelMethod = () => {
 	} | null>(null)
 
 	const handleSolve = () => {
-		setShow('solve')
 		const { A, B } = {
 			A: matrixToMatrixNum(matrix),
 			B: vectorToVectorNum(vector),
@@ -50,7 +48,6 @@ const SeidelMethod = () => {
 	}
 
 	const handleTest = () => {
-		setShow('solve')
 		setParams({ ...params, n: '4' })
 		const { A, B } = iterationSeidelTest()
 		setMatrix(matrixToMatrixStr(A))
@@ -66,7 +63,7 @@ const SeidelMethod = () => {
 			vectorSize: vector.length,
 			setVector,
 		})
-		setShow('no')
+		setAnswer(null)
 	}
 
 	return (
@@ -76,7 +73,7 @@ const SeidelMethod = () => {
 				<Button onClick={handleTest}>Test</Button>
 				<Button onClick={handleClear}>Clear</Button>
 			</div>
-			<div>{show === 'solve' && answer && <Answer answer={answer} />}</div>
+			<div>{answer && <Answer answer={answer} />}</div>
 		</div>
 	)
 }

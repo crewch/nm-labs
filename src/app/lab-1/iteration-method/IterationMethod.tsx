@@ -24,7 +24,6 @@ const IterationMethod = () => {
 	const { matrix, setMatrix } = useContext(MatrixContext)
 	const { vector, setVector } = useContext(VectorContext)
 	const { params, setParams } = useContext(ParamsContext)
-	const [show, setShow] = useState<'solve' | 'no'>('no')
 	const [answer, setAnswer] = useState<{
 		alpha: IMatrix
 		beta: IVector
@@ -42,7 +41,6 @@ const IterationMethod = () => {
 	} | null>(null)
 
 	const handleSolve = () => {
-		setShow('solve')
 		const { A, B } = {
 			A: matrixToMatrixNum(matrix),
 			B: vectorToVectorNum(vector),
@@ -52,7 +50,6 @@ const IterationMethod = () => {
 	}
 
 	const handleTest = () => {
-		setShow('solve')
 		setParams({ ...params, n: '4' })
 		const { A, B } = iterationSeidelTest()
 		setMatrix(matrixToMatrixStr(A))
@@ -68,7 +65,7 @@ const IterationMethod = () => {
 			vectorSize: vector.length,
 			setVector,
 		})
-		setShow('no')
+		setAnswer(null)
 	}
 
 	return (
@@ -78,7 +75,7 @@ const IterationMethod = () => {
 				<Button onClick={handleTest}>Test</Button>
 				<Button onClick={handleClear}>Clear</Button>
 			</div>
-			<div>{show === 'solve' && answer && <Answer answer={answer} />}</div>
+			<div>{answer && <Answer answer={answer} />}</div>
 		</div>
 	)
 }

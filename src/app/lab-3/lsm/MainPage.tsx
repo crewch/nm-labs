@@ -31,14 +31,12 @@ const MainPage = () => {
 	const [n, setN] = useState(4)
 	const [x, setX] = useState<string[]>(['0', '0', '0', '0'])
 	const [f, setF] = useState<string[]>(['0', '0', '0', '0'])
-	const [show, setShow] = useState<'solve' | 'no'>('no')
 	const [answer, setAnswer] = useState<{
 		result: string
 		polys: { poly1: number[]; poly2: number[] }
 	} | null>(null)
 
 	const handleSolve = () => {
-		setShow('solve')
 		const task = new Task3(x.map(Number), f.map(Number))
 		const [result1, poly1] = task.run(2)
 		const [result2, poly2] = task.run(3)
@@ -47,7 +45,6 @@ const MainPage = () => {
 	}
 
 	const handleTest = () => {
-		setShow('solve')
 		const testX = ['-0.7', '-0.4', '-0.1', '0.2', '0.5', '0.8']
 		const testF = ['2.3462', '1.9823', '1.671', '1.3694', '1.0472', '0.6435']
 
@@ -57,13 +54,12 @@ const MainPage = () => {
 		const task = new Task3(testX.map(Number), testF.map(Number))
 		const [result1, poly1] = task.run(2)
 		const [result2, poly2] = task.run(3)
-		console.log({ polys: { poly1, poly2 } })
 
 		setAnswer({ result: `${result1}\n${result2}`, polys: { poly1, poly2 } })
 	}
 
 	const handleClear = () => {
-		setShow('no')
+		setAnswer(null)
 		setN(4)
 		setX(['0', '0', '0', '0'])
 		setF(['0', '0', '0', '0'])
@@ -169,7 +165,7 @@ const MainPage = () => {
 				</div>
 			</section>
 			<div className='flex justify-center'>
-				{show === 'solve' && answer && (
+				{answer && (
 					<div>
 						<pre>{answer.result}</pre>
 						<Line

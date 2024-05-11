@@ -32,21 +32,18 @@ const MainPage = () => {
 	const [xStar, setXStar] = useState(0.1)
 	const [x, setX] = useState<string[]>(['0', '0', '0', '0'])
 	const [f, setF] = useState<string[]>(['0', '0', '0', '0'])
-	const [show, setShow] = useState<'solve' | 'no'>('no')
 	const [answer, setAnswer] = useState<{
 		result: string
 		splines: { polynomials: number[][]; points: number[] }
 	} | null>(null)
 
 	const handleSolve = () => {
-		setShow('solve')
 		const task = new Task2(x.map(Number), f.map(Number), xStar)
 		const [result, splines] = task.run()
 		setAnswer({ result, splines })
 	}
 
 	const handleTest = () => {
-		setShow('solve')
 		const testXStar = 0.1
 		const testX = ['-0.4', '-0.1', '0.2', '0.5', '0.8']
 		const testF = ['1.9823', '1.6710', '1.3694', '1.0472', '0.64350']
@@ -62,7 +59,7 @@ const MainPage = () => {
 	}
 
 	const handleClear = () => {
-		setShow('no')
+		setAnswer(null)
 		setN(4)
 		setX(['0', '0', '0', '0'])
 		setF(['0', '0', '0', '0'])
@@ -178,7 +175,7 @@ const MainPage = () => {
 				</div>
 			</section>
 			<div className='flex justify-center'>
-				{show === 'solve' && answer && (
+				{answer && (
 					<div>
 						<pre>{answer.result}</pre>
 						<Line

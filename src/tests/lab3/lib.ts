@@ -330,10 +330,13 @@ export class Polynomial {
 	}
 
 	public static openBrackets(poly: number[]): number[] {
+		if (!poly.length) return []
 		const v = [...poly]
+
 		if (v.length === 1) {
 			return [v[0], 1]
 		}
+
 		const n = v.length
 		const last = v.pop()!
 		const res = Polynomial.openBrackets(v)

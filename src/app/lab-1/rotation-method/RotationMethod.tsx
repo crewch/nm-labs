@@ -20,13 +20,11 @@ const RotationMethod = () => {
 	const { matrix, setMatrix } = useContext(MatrixContext)
 	const { vector, setVector } = useContext(VectorContext)
 	const { params, setParams } = useContext(ParamsContext)
-	const [show, setShow] = useState<'solve' | 'no'>('no')
 	const [answer, setAnswer] = useState<(IMatrix | IVector | string)[] | null>(
 		null
 	)
 
 	const handleSolve = () => {
-		setShow('solve')
 		const { A } = {
 			A: matrixToMatrixNum(matrix),
 		}
@@ -36,7 +34,6 @@ const RotationMethod = () => {
 	}
 
 	const handleTest = () => {
-		setShow('solve')
 		setParams({ ...params, n: '3' })
 		const { A, B } = rotationTest()
 		setMatrix(matrixToMatrixStr(A))
@@ -52,7 +49,7 @@ const RotationMethod = () => {
 			vectorSize: vector.length,
 			setVector,
 		})
-		setShow('no')
+		setAnswer(null)
 	}
 
 	return (
@@ -62,7 +59,7 @@ const RotationMethod = () => {
 				<Button onClick={handleTest}>Test</Button>
 				<Button onClick={handleClear}>Clear</Button>
 			</div>
-			<div>{show === 'solve' && answer && <Answer answer={answer} />}</div>
+			<div>{answer && <Answer answer={answer} />}</div>
 		</div>
 	)
 }
