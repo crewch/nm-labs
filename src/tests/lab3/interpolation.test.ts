@@ -1,4 +1,11 @@
-import { Lexer, Solver, Polynomial, Matrix, Parser, Task1Args } from './lib'
+import {
+	Lexer,
+	Solver,
+	Polynomial,
+	Matrix,
+	Parser,
+	Task1Args,
+} from '../lib/lib'
 
 const initializeTask = ({ y, x, xStar }: Task1Args) => {
 	const lexer = new Lexer()
@@ -15,6 +22,7 @@ const str = (value: number): string => value.toFixed(4)
 
 const printStringLagrange = (...values: string[]): string => {
 	const pad = 20
+
 	return values.map(value => value.padEnd(pad)).join('') + '\n'
 }
 
@@ -41,16 +49,20 @@ const lagrangeInterpolation = ({
 	for (let i = 0; i < n; i++) {
 		let tmp = []
 		let coef = fX[i]
+
 		for (let j = 0; j < n; j++) {
 			if (i !== j) {
 				tmp.push(-X[j])
 				coef /= X[i] - X[j]
 			}
 		}
+
 		const tmpPoly = Polynomial.openBrackets(tmp)
+
 		for (let j = 0; j < n; j++) {
 			interpolation[j] += coef * tmpPoly[j]
 		}
+
 		result += printStringLagrange(
 			i.toString(),
 			str(X[i]),
@@ -89,6 +101,7 @@ const newtonInterpolation = ({
 	for (let i = 0; i < n - 1; i++) {
 		difference.set(0, i, (fX[i] - fX[i + 1]) / (X[i] - X[i + 1]))
 	}
+
 	for (let i = 1; i < n - 1; i++) {
 		for (let j = 0; j < n - i - 1; j++) {
 			difference.set(
@@ -101,6 +114,7 @@ const newtonInterpolation = ({
 	}
 
 	result += printStringLagrange('0', str(X[0]), str(fX[0]), '', '', '')
+
 	for (let i = 1; i < n; i++) {
 		const diffs = new Array(n - i)
 			.fill('')
@@ -109,13 +123,16 @@ const newtonInterpolation = ({
 	}
 
 	let current = []
+
 	for (let i = 0; i < n - 1; i++) {
 		current.push(-X[i])
 		const tmp = Polynomial.openBrackets(current)
+
 		for (let j = 0; j < tmp.length; j++) {
 			interpolation[j] += difference.get(i, 0) * tmp[j]
 		}
 	}
+
 	const poly = new Polynomial(interpolation)
 	result += `\nP3(x) = ${poly.toString()}`
 	result += `\nP3(${xStar}) = ${poly.calculate(xStar)}`
@@ -132,5 +149,6 @@ export const runTask1 = (args: Task1Args): string => {
 	let results = lagrangeInterpolation(context)
 	results += '\n\n'
 	results += newtonInterpolation(context)
+
 	return results
 }

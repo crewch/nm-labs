@@ -36,6 +36,7 @@ const MainPage = () => {
 	const updateVector = (index: number, value: string) => {
 		const newVector = [...x]
 		newVector[index] = value
+
 		setX(newVector)
 	}
 

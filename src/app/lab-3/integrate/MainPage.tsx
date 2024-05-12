@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Task5 } from '@/tests/lab3/integrate.test'
-import { Lexer, Parser } from '@/tests/lab3/lib'
+import { Lexer, Parser } from '@/tests/lib/lib'
 import { useEffect, useState } from 'react'
 
 const MainPage = () => {
@@ -20,6 +20,7 @@ const MainPage = () => {
 		let fX = lexer.run(y)
 		fX = parser.toPostfix(fX)
 		let t5 = new Task5(x.map(Number), fX)
+
 		setAnswer(t5.run(h.h1, h.h2))
 	}
 
@@ -38,6 +39,7 @@ const MainPage = () => {
 		let fX = lexer.run(testY)
 		fX = parser.toPostfix(fX)
 		let t5 = new Task5(testX.map(Number), fX)
+
 		setAnswer(t5.run(testH.h1, testH.h2))
 	}
 
@@ -50,6 +52,7 @@ const MainPage = () => {
 	const updateVectorX = (index: number, value: string) => {
 		const newVector = [...x]
 		newVector[index] = value
+		
 		setX(newVector)
 	}
 

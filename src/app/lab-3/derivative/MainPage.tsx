@@ -16,6 +16,7 @@ const MainPage = () => {
 	const handleSolve = () => {
 		const task = new Task4(x.map(Number), f.map(Number), xStar)
 		let result = `${task.run(1)}${task.run(2)}`
+
 		setAnswer(result)
 	}
 
@@ -28,8 +29,10 @@ const MainPage = () => {
 		setXStar(testXStar)
 		setX(testX)
 		setF(testF)
+
 		const task = new Task4(testX.map(Number), testF.map(Number), testXStar)
 		const result = `${task.run(1)}${task.run(2)}`
+
 		setAnswer(result)
 	}
 
@@ -43,12 +46,14 @@ const MainPage = () => {
 	const updateVectorX = (index: number, value: string) => {
 		const newVector = [...x]
 		newVector[index] = value
+
 		setX(newVector)
 	}
 
 	const updateVectorF = (index: number, value: string) => {
 		const newVector = [...f]
 		newVector[index] = value
+
 		setF(newVector)
 	}
 

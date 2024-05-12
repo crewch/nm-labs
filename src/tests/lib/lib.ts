@@ -68,6 +68,7 @@ export class Lexer {
 				} else {
 					tokens.push(new Token(TokenType.Operator, current))
 				}
+
 				position++
 				expectUnary = true
 			} else if (this.isLetter(current)) {
@@ -107,17 +108,21 @@ export class Lexer {
 
 	private parseNumber(input: string, start: number): string {
 		let position = start
+
 		while (position < input.length && /\d|\./.test(input[position])) {
 			position++
 		}
+
 		return input.substring(start, position)
 	}
 
 	private parseWord(input: string, start: number): string {
 		let position = start
+
 		while (position < input.length && /\w/.test(input[position])) {
 			position++
 		}
+
 		return input.substring(start, position)
 	}
 
@@ -133,13 +138,17 @@ export class Lexer {
 			'arcsin',
 			'arccos',
 		]
+
 		if (functions.includes(word)) {
 			return TokenType.Function
 		}
+
 		const parameters = ['a']
+
 		if (parameters.includes(word)) {
 			return TokenType.Parameter
 		}
+
 		return TokenType.Variable
 	}
 }
@@ -155,10 +164,12 @@ export class Parser {
 				case TokenType.Parameter:
 				case TokenType.Variable:
 					outputQueue.push(token)
+
 					break
 				case TokenType.Function:
 				case TokenType.UnaryOperator:
 					operatorStack.push(token)
+
 					break
 				case TokenType.Operator:
 					while (
@@ -169,10 +180,13 @@ export class Parser {
 					) {
 						outputQueue.push(operatorStack.pop()!)
 					}
+
 					operatorStack.push(token)
+
 					break
 				case TokenType.OpenParenthesis:
 					operatorStack.push(token)
+
 					break
 				case TokenType.CloseParenthesis:
 					while (
@@ -182,13 +196,16 @@ export class Parser {
 					) {
 						outputQueue.push(operatorStack.pop()!)
 					}
+
 					operatorStack.pop()
+
 					if (
 						operatorStack.length > 0 &&
 						operatorStack[operatorStack.length - 1].type === TokenType.Function
 					) {
 						outputQueue.push(operatorStack.pop()!)
 					}
+
 					break
 			}
 		})
@@ -231,6 +248,7 @@ export class Solver {
 		} else if (token.value === 'y' || token.value === 'x2') {
 			return x2
 		}
+
 		throw new Error(`Unrecognized variable: ${token.value}`)
 	}
 
@@ -321,6 +339,7 @@ export class Polynomial {
 	public calculate(x: number): number {
 		let result = 0
 		let currentPower = 1
+
 		for (let coefficient of this.coefficients) {
 			result += currentPower * coefficient
 			currentPower *= x
@@ -345,10 +364,13 @@ export class Polynomial {
 		for (let i = 0; i < n; i++) {
 			res[i] *= last
 		}
+
 		res.push(0)
+
 		for (let i = 1; i <= n; i++) {
 			res[i] += tmp[i - 1]
 		}
+
 		return res
 	}
 
@@ -358,6 +380,7 @@ export class Polynomial {
 
 	public toString(): string {
 		let result = ''
+
 		for (let i = this.coefficients.length - 1; i > 0; i--) {
 			result +=
 				(i === this.coefficients.length - 1
@@ -367,7 +390,9 @@ export class Polynomial {
 				i +
 				(this.coefficients[i - 1] >= 0 ? '+' : '-')
 		}
+
 		result += Polynomial.str(Math.abs(this.coefficients[0]))
+
 		return result
 	}
 }
@@ -398,6 +423,7 @@ export class Matrix {
 	public clone(): Matrix {
 		const cloned = new Matrix()
 		cloned.buffer = this.buffer.map(row => [...row])
+
 		return cloned
 	}
 
@@ -405,11 +431,13 @@ export class Matrix {
 		const n = this.rows
 		const m = this.cols
 		const res = new Matrix(m, n)
+
 		for (let i = 0; i < n; i++) {
 			for (let j = 0; j < m; j++) {
 				res.set(j, i, this.buffer[i][j])
 			}
 		}
+
 		return res
 	}
 
@@ -453,6 +481,7 @@ export class Matrix {
 		}
 
 		const res = new Matrix(A.rows, B.cols)
+
 		for (let i = 0; i < A.rows; i++) {
 			for (let j = 0; j < B.cols; j++) {
 				let sum = 0
@@ -462,6 +491,7 @@ export class Matrix {
 				res.set(i, j, sum)
 			}
 		}
+
 		return res
 	}
 
@@ -471,7 +501,9 @@ export class Matrix {
 				'Matrix and Vector dimensions do not match for multiplication.'
 			)
 		}
+
 		const res = new Vector(A.rows)
+
 		for (let i = 0; i < A.rows; i++) {
 			let sum = 0
 			for (let k = 0; k < B.rows; k++) {
@@ -479,6 +511,7 @@ export class Matrix {
 			}
 			res.set(i, sum)
 		}
+
 		return res
 	}
 
@@ -502,12 +535,14 @@ export class Matrix {
 
 	public norm(): number {
 		let max = 0
+
 		for (let i = 0; i < this.rows; i++) {
 			let sum = this.buffer[i].reduce((acc, val) => acc + Math.abs(val), 0)
 			if (sum > max) {
 				max = sum
 			}
 		}
+
 		return max
 	}
 
@@ -623,12 +658,14 @@ export class CubicSpline {
 		let low = 0,
 			high = this.points.length - 1,
 			mid
+
 		while (low <= high) {
 			mid = Math.floor((low + high) / 2)
 			if (this.points[mid] === x) return mid
 			else if (this.points[mid] < x) low = mid + 1
 			else high = mid - 1
 		}
+
 		return low
 	}
 
@@ -638,6 +675,7 @@ export class CubicSpline {
 
 	toString(): string {
 		let res = ''
+
 		for (let i = 0; i < this.polynomials.length; i++) {
 			res += `[${this.points[i]}; ${this.points[i + 1]}] ${
 				this.polynomials[i]

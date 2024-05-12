@@ -1,4 +1,4 @@
-import { Solver, Token } from './lib'
+import { Solver, Token } from '../lib/lib'
 
 export class Task5 {
 	private readonly X: number[]
@@ -32,6 +32,7 @@ export class Task5 {
 		res += trp.padEnd(pad)
 		res += simp.padEnd(pad)
 		res += '\n'
+
 		return res
 	}
 
@@ -60,6 +61,7 @@ export class Task5 {
 			X0 += h
 			iter++
 		}
+
 		X0 = this.X[0]
 		iter = 0
 
@@ -69,6 +71,7 @@ export class Task5 {
 			X0 += h
 			iter++
 		}
+
 		X0 = this.X[0]
 		iter = 0
 		sum = 0
@@ -82,6 +85,7 @@ export class Task5 {
 			X0 += h
 			iter++
 		}
+
 		X0 = this.X[0]
 		iter = 0
 		sum = 0
@@ -91,6 +95,7 @@ export class Task5 {
 				iter++
 				continue
 			}
+
 			table[iter][4] = sum / 3
 			sum +=
 				(this.solver.solve(this.functionTokens, X0, 0, 0) +
@@ -109,6 +114,7 @@ export class Task5 {
 			'Trapezoids',
 			'Simpson'
 		)
+
 		for (let i = 0; i < range; i++) {
 			res += Task5.printString(
 				i.toString(),
@@ -119,6 +125,7 @@ export class Task5 {
 				Task5.str(table[i][4])
 			)
 		}
+
 		return [res, table]
 	}
 
@@ -153,6 +160,7 @@ export class Task5 {
 			h2,
 			2
 		)}\n`
+
 		return res
 	}
 }

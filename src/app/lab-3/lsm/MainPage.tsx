@@ -51,6 +51,7 @@ const MainPage = () => {
 		setN(6)
 		setX(testX)
 		setF(testF)
+
 		const task = new Task3(testX.map(Number), testF.map(Number))
 		const [result1, poly1] = task.run(2)
 		const [result2, poly2] = task.run(3)
@@ -68,12 +69,14 @@ const MainPage = () => {
 	const updateVectorX = (index: number, value: string) => {
 		const newVector = [...x]
 		newVector[index] = value
+
 		setX(newVector)
 	}
 
 	const updateVectorF = (index: number, value: string) => {
 		const newVector = [...f]
 		newVector[index] = value
+
 		setF(newVector)
 	}
 

@@ -1,5 +1,5 @@
 import { luDecomposition, solveLU } from '../lab1/lu-decomposition.test'
-import { Matrix, Polynomial, Vector } from './lib'
+import { Matrix, Polynomial, Vector } from '../lib/lib'
 
 export class Task3 {
 	private readonly X: number[]
@@ -24,6 +24,7 @@ export class Task3 {
 		value = Fxi.padEnd(pad)
 		res += value
 		res += '\n'
+
 		return res
 	}
 
@@ -32,11 +33,13 @@ export class Task3 {
 		res += `LSM with pow = ${pow - 1}:\n\n`
 		const n = this.X.length
 		const Phi = new Matrix(n, pow)
+
 		for (let i = 0; i < n; i++) {
 			for (let j = 0; j < pow; j++) {
 				Phi.set(i, j, Math.pow(this.X[i], j))
 			}
 		}
+
 		const PhiT = Phi.transpose()
 		const G = Matrix.multiplyMM(PhiT, Phi)
 		const Y = new Vector(this.fX)
@@ -56,6 +59,7 @@ export class Task3 {
 		let MSE = 0
 		res += Task3.printString('i', 'xi', `F${pow - 1}(xi)`)
 		res += '\n'
+
 		for (let i = 0; i < n; i++) {
 			const FpowXj = poly.calculate(this.X[i])
 			res += Task3.printString(
@@ -65,6 +69,7 @@ export class Task3 {
 			)
 			MSE += Math.pow(FpowXj - this.fX[i], 2)
 		}
+
 		res += '\n'
 		res += poly.toString()
 		res += `\n\nФ = ${MSE}\n\n`

@@ -1,5 +1,5 @@
 import { thomasAlgorithm } from '../lab1/tma.test'
-import { Matrix, Vector, Polynomial, CubicSpline } from './lib'
+import { Matrix, Vector, Polynomial, CubicSpline } from '../lib/lib'
 
 export class Task2 {
 	private X: number[]
@@ -25,6 +25,7 @@ export class Task2 {
 		di: string
 	): string {
 		const pad = 20
+
 		return `${i.padEnd(pad)}${range.padEnd(pad)}${ai.padEnd(pad)}${bi.padEnd(
 			pad
 		)}${ci.padEnd(pad)}${di.padEnd(pad)}\n`
@@ -38,20 +39,25 @@ export class Task2 {
 		const c = new Vector(n)
 		const d = new Vector(n)
 		const h = new Vector(n)
+
 		for (let i = 0; i < n; i++) {
 			h.set(i, this.X[i + 1] - this.X[i])
 		}
 
 		const A = new Matrix(n - 1)
 		const B = new Vector(n - 1)
+
 		for (let i = 0; i < n - 1; i++) {
 			if (i > 0) {
 				A.set(i, i - 1, h.get(i))
 			}
+
 			A.set(i, i, 2 * (h.get(i) + h.get(i + 1)))
+
 			if (i < n - 2) {
 				A.set(i, i + 1, h.get(i + 1))
 			}
+
 			B.set(
 				i,
 				3 *
@@ -66,8 +72,10 @@ export class Task2 {
 		for (let i = 1; i < n; i++) {
 			c.set(i, s.get(i - 1))
 		}
+
 		for (let i = 0; i < n; i++) {
 			a.set(i, this.fX[i])
+
 			if (i < n - 1) {
 				b.set(
 					i,
@@ -75,18 +83,22 @@ export class Task2 {
 						(h.get(i) / 3) * (c.get(i + 1) + 2 * c.get(i))
 				)
 			}
+
 			if (i > 0) {
 				d.set(i - 1, (c.get(i) - c.get(i - 1)) / (3 * h.get(i - 1)))
 			}
 		}
+
 		b.set(
 			n - 1,
 			(this.fX[n] - this.fX[n - 1]) / h.get(n - 1) -
 				(2 / 3) * h.get(n - 1) * c.get(n - 1)
 		)
+
 		d.set(n - 1, -c.get(n - 1) / (3 * h.get(n - 1)))
 
 		res += Task2.printString('i', '[x_i-1, x_i]', 'ai', 'bi', 'ci', 'di')
+
 		for (let i = 0; i < n; i++) {
 			res += Task2.printString(
 				(i + 1).toString(),
@@ -99,6 +111,7 @@ export class Task2 {
 		}
 
 		const polynomials: Polynomial[] = []
+
 		for (let i = 0; i < n; i++) {
 			const ansV: number[] = [a.get(i), 0, 0, 0]
 			const tmp: number[] = []
@@ -107,6 +120,7 @@ export class Task2 {
 			for (let j = 1; j < 4; j++) {
 				tmp.push(-this.X[i])
 				const tmp1 = Polynomial.openBrackets(tmp)
+
 				for (let k = 0; k < tmp1.length; k++) {
 					ansV[k] += tmp1[k] * coefs[j]
 				}
@@ -114,6 +128,7 @@ export class Task2 {
 
 			polynomials.push(new Polynomial(ansV))
 		}
+
 		const spline = new CubicSpline(this.X, polynomials)
 
 		res += `\n${spline.toString()}\n${spline
@@ -121,6 +136,7 @@ export class Task2 {
 			.toFixed(6)}\n`
 
 		const splineRes = spline.getCubicSpline()
+
 		return [
 			res,
 			{
