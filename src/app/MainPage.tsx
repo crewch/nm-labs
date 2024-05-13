@@ -21,7 +21,7 @@ const MainPage = () => {
 				</Button>
 				<Separator orientation='vertical' />
 				<Button asChild variant={'link'} className='text-2xl'>
-					<Link href={'lab-4/'}>Lab 4</Link>
+					<Link href={'lab-4/cauchy'}>Lab 4</Link>
 				</Button>
 			</nav>
 		</header>
