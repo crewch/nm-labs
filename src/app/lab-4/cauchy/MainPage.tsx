@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Task1 } from '@/tests/lab4/cauchy.test'
 import { useState } from 'react'
 
 const MainPage = () => {
@@ -13,9 +14,37 @@ const MainPage = () => {
 	const [h, setH] = useState(1)
 	const [answer, setAnswer] = useState<string | null>(null)
 
-	const handleSolve = () => {}
+	const handleSolve = () => {
+		const result = new Task1(f, x.x0, x.x1, y.y0, y.y1, exact, h)
 
-	const handleTest = () => {}
+		setAnswer(result.run())
+	}
+
+	const handleTest = () => {
+		const testF = "((x + 1) * y' - y) / x"
+		const testX = { x0: 1, x1: 2 }
+		const testY = { y0: '2 + exp(1)', y1: '1 + exp(1)' }
+		const testExact = 'x + 1 + exp(x)'
+		const testH = 0.1
+
+		setF(testF)
+		setX(testX)
+		setY(testY)
+		setExact(testExact)
+		setH(testH)
+
+		const result = new Task1(
+			testF,
+			testX.x0,
+			testX.x1,
+			testY.y0,
+			testY.y1,
+			testExact,
+			testH
+		)
+
+		setAnswer(result.run())
+	}
 
 	const handleClear = () => {
 		setF('')
@@ -37,7 +66,7 @@ const MainPage = () => {
 				<div>
 					<Label>f(x, y, y{"'"})</Label>
 					<Input
-						className='w-28'
+						className='w-56'
 						value={f}
 						onChange={e => setF(e.target.value)}
 					/>
@@ -63,15 +92,15 @@ const MainPage = () => {
 				<div>
 					<Label>y(x0)</Label>
 					<Input
-						className='w-28'
+						className='w-44'
 						value={y.y0}
 						onChange={e => setY(prev => ({ ...prev, y0: e.target.value }))}
 					/>
 				</div>
 				<div>
-					<Label>y(x1)</Label>
+					<Label>y{"'"}(x0)</Label>
 					<Input
-						className='w-28'
+						className='w-44'
 						value={y.y1}
 						onChange={e => setY(prev => ({ ...prev, y1: e.target.value }))}
 					/>
@@ -79,7 +108,7 @@ const MainPage = () => {
 				<div>
 					<Label>exact</Label>
 					<Input
-						className='w-28'
+						className='w-44'
 						value={exact}
 						onChange={e => setExact(e.target.value)}
 					/>
@@ -94,7 +123,7 @@ const MainPage = () => {
 					/>
 				</div>
 			</section>
-			<div>{answer && <pre>{answer}</pre>}</div>
+			<div className='flex justify-center'>{answer && <pre>{answer}</pre>}</div>
 		</div>
 	)
 }
