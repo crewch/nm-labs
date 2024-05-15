@@ -12,8 +12,8 @@ export const lab21 = () => {
 	}
 
 	// a и b из Desmos
-	const a: number = -0.5
-	const b: number = 0
+	const a: number = 0.3
+	const b: number = 1
 	const epsilon: number = 0.001
 	let x: number = b
 	let prevX: number = x
@@ -70,6 +70,7 @@ export const lab21 = () => {
 		)
 
 		if (Math.abs(x - prevX) <= epsilon) {
+			//todo исправить
 			break
 		}
 

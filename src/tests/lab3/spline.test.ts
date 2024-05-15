@@ -134,7 +134,7 @@ export class Task2 {
 		res += `\n${spline.toString()}\n${spline
 			.calculate(this.xStar)
 			.toFixed(6)}\n`
-
+		// исправить график без лишних точек(гладкий)
 		const splineRes = spline.getCubicSpline()
 
 		return [

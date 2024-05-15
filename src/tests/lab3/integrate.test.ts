@@ -1,5 +1,5 @@
 import { Solver, Token } from '../lib/lib'
-
+// выводить оценку погрешности
 export class Task5 {
 	private readonly X: number[]
 	private functionTokens: Token[]

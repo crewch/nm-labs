@@ -112,7 +112,7 @@ const newtonInterpolation = ({
 			)
 		}
 	}
-
+	// todo сделать график убрать лишнюю информацию в первом методе
 	result += printStringLagrange('0', str(X[0]), str(fX[0]), '', '', '')
 
 	for (let i = 1; i < n; i++) {

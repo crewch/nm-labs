@@ -185,7 +185,7 @@ export const lab22 = () => {
 		]
 		const detA2k =
 			matrixA2k[0][0] * matrixA2k[1][1] - matrixA2k[0][1] * matrixA2k[1][0]
-
+		// todo сделать нормальным методом не из методички
 		x -= detA1k / detJk
 		y -= detA2k / detJk
 
