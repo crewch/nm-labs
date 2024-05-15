@@ -1,6 +1,6 @@
 import { luDecomposition, solveLU } from '../lab1/lu-decomposition.test'
 import { Matrix, Polynomial, Vector } from '../lib/lib'
-// исправить решение из методички
+// todo исправить решение из методички
 export class Task3 {
 	private readonly X: number[]
 	private readonly fX: number[]

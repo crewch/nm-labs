@@ -70,7 +70,7 @@ export const lab21 = () => {
 		)
 
 		if (Math.abs(x - prevX) <= epsilon) {
-			//todo исправить
+			// todo исправить
 			break
 		}
 
