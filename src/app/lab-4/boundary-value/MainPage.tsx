@@ -23,13 +23,16 @@ const MainPage = () => {
 	}
 
 	const handleTest = () => {
-		const testF = "(y - (x - 3) * y') / (x^2 - 1)"
-		const testX = { x0: 0, x1: 1 }
-		const testY = { y0: '1 * y(0) = 0', y1: "1 * y'(1) + 1 * y(1) = -0,75" }
-		const testExact = 'x - 3 + (1 / (x + 1))'
+		const testF = "(2 * y - 2 * (x + 1) * y') / (x * (2 * x + 1))"
+		const testX = { x0: 1, x1: 3 }
+		const testY = {
+			y0: "1 * y'(1) = 0",
+			y1: "1 * y(3) - 1 * y'(3) = 3,44444444",
+		}
+		const testExact = '1 + x + (1 / x)'
 		const testH = 0.1
-		const testP = '1 / (x^2 - 1)'
-		const testQ = '-(x - 3) / (x^2 - 1)'
+		const testP = '2 * (x + 1) / (x * (2 * x + 1))'
+		const testQ = '-2 / (x * (2 * x + 1))'
 
 		setF(testF)
 		setX(testX)
@@ -60,6 +63,8 @@ const MainPage = () => {
 		setY({ y0: '', y1: '' })
 		setExact('')
 		setH(1)
+		setP('')
+		setQ('')
 		setAnswer(null)
 	}
 
@@ -70,7 +75,7 @@ const MainPage = () => {
 				<Button onClick={handleTest}>Test</Button>
 				<Button onClick={handleClear}>Clear</Button>
 			</div>
-			<section className='flex justify-center gap-5 my-5'>
+			<section className='flex justify-center flex-wrap gap-5 my-5'>
 				<div>
 					<Label>f(x, y, y{"'"})</Label>
 					<Input
@@ -127,6 +132,7 @@ const MainPage = () => {
 						type='number'
 						className='w-20'
 						value={h}
+						step={0.1}
 						onChange={e => setH(+e.target.value)}
 					/>
 				</div>

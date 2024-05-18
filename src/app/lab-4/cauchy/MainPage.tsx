@@ -119,6 +119,7 @@ const MainPage = () => {
 						type='number'
 						className='w-20'
 						value={h}
+						step={0.1}
 						onChange={e => setH(+e.target.value)}
 					/>
 				</div>
