@@ -25,6 +25,7 @@ class Solver {
 			} else if (f[i].type === TokenType.Function) {
 				let funcRes = 0
 				const tmp = stack.pop()!
+
 				switch (f[i].value) {
 					case 'sqrt':
 						if (tmp < 0) return 0
@@ -58,10 +59,12 @@ class Solver {
 						funcRes = Math.exp(tmp)
 						break
 				}
+
 				stack.push(funcRes)
 			} else if (f[i].type === TokenType.Operator) {
 				const tmp2 = stack.pop()!
 				const tmp1 = stack.pop()!
+
 				switch (f[i].value) {
 					case '+':
 						stack.push(tmp1 + tmp2)
@@ -82,9 +85,11 @@ class Solver {
 				}
 			} else if (f[i].type === TokenType.UnaryOperator) {
 				let tmp = stack.pop()!
+
 				if (f[i].value === '-') {
 					tmp *= -1
 				}
+
 				stack.push(tmp)
 			}
 		}
@@ -94,6 +99,7 @@ class Solver {
 	getConstraints(tokens: Token[]): number[] {
 		const constraints: number[] = new Array(3).fill(0)
 		const stack: Token[] = []
+
 		for (const token of tokens) {
 			if (token.type === TokenType.Variable) {
 				stack.push(token)
@@ -103,8 +109,10 @@ class Solver {
 				if (token.value === '=') {
 					const c = stack.pop()!.valueAsDouble!
 					constraints[2] = c
+
 					if (stack.length !== 0) {
 						const rank = stack.pop()!
+
 						if (rank.value === 'y') {
 							constraints[0] = 1
 						} else {
@@ -115,15 +123,18 @@ class Solver {
 					stack.pop()
 					const rank = stack.pop()!
 					const constr = stack.pop()!.valueAsDouble!
+
 					if (rank.value === 'y') {
 						constraints[0] = constr
 					} else {
 						constraints[1] = constr
 					}
+
 					stack.push(rank)
 				} else if (token.value === '-' || token.value === '+') {
 					const rank = stack.pop()!
 					stack.pop()
+
 					if (rank.type === TokenType.Variable) {
 						if (token.value === '-') {
 							if (rank.value === 'y') {
@@ -142,13 +153,16 @@ class Solver {
 				}
 			} else if (token.type === TokenType.UnaryOperator) {
 				const tmp = stack.pop()!
+
 				if (token.value === '-') {
 					tmp.value = token.value + tmp.value
 					tmp.valueAsDouble! *= -1
 				}
+
 				stack.push(tmp)
 			}
 		}
+
 		return constraints
 	}
 }
@@ -175,6 +189,7 @@ class Lexer {
 				} else {
 					tokens.push(new Token(TokenType.Operator, current))
 				}
+
 				position++
 				expectUnary = true
 			} else if (this.isLetter(current)) {
@@ -184,6 +199,7 @@ class Lexer {
 					: this.isParameter(word.value)
 					? TokenType.Parameter
 					: TokenType.Variable
+
 				tokens.push(new Token(type, word.value))
 				position = word.position
 				expectUnary = false
@@ -210,12 +226,14 @@ class Lexer {
 		position: number
 	): { value: string; position: number } {
 		const start = position
+
 		while (
 			position < input.length &&
 			(this.isDigit(input[position]) || input[position] === ',')
 		) {
 			position++
 		}
+
 		return { value: input.substring(start, position), position: position }
 	}
 
@@ -224,6 +242,7 @@ class Lexer {
 		position: number
 	): { value: string; position: number } {
 		const start = position
+
 		while (
 			position < input.length &&
 			(this.isLetter(input[position]) ||
@@ -232,6 +251,7 @@ class Lexer {
 		) {
 			position++
 		}
+
 		return { value: input.substring(start, position), position: position }
 	}
 
@@ -247,11 +267,13 @@ class Lexer {
 			'arcsin',
 			'arccos',
 		]
+
 		return functions.includes(word)
 	}
 
 	private isParameter(word: string): boolean {
 		const parameters = ['a']
+
 		return parameters.includes(word)
 	}
 
@@ -380,6 +402,7 @@ export class Task1 {
 		let z = this.solver.solve(this.z0Tokens, 0, 0, 0)
 		let yExact = this.solver.solve(this.exactTokens, x, 0, 0)
 		let k = 0
+
 		while (k < n) {
 			const dyk = this.h * this.solver.solve(this.fTokens, x, y, z)
 			res += this.printStringEuler(
@@ -416,7 +439,9 @@ export class Task1 {
 			'y_exact',
 			'ε(k)'
 		)
+
 		res += '\n'
+
 		const table: number[][] = [[], [], []]
 
 		let x = this.x0
@@ -429,14 +454,18 @@ export class Task1 {
 
 		let yExact
 		let k = 0
+
 		while (k < n) {
 			const K: number[] = new Array(4)
 			const L: number[] = new Array(4)
+
 			for (let i = 0; i < 4; i++) {
 				let yk = y
+
 				for (let j = 0; j < i; j++) {
 					yk += 0.5 * K[j]
 				}
+
 				yExact = this.solver.solve(this.exactTokens, x, 0, 0)
 				const epsK = Math.abs(y - yExact)
 
@@ -453,6 +482,7 @@ export class Task1 {
 
 					const dyk = (K[0] + 2 * K[1] + 2 * K[2] + K[3]) / 6
 					const thetaK = Math.abs((K[1] - K[2]) / (K[0] - K[1]))
+
 					res += this.printStringRungeKutta(
 						`${k}/${i + 1}`,
 						(x + 0.5 * this.h * i).toFixed(4),
@@ -463,6 +493,7 @@ export class Task1 {
 						'',
 						''
 					)
+
 					res += '\n'
 				} else {
 					if (i === 0) {
@@ -502,6 +533,7 @@ export class Task1 {
 					)
 				}
 			}
+
 			z += (K[0] + 2 * K[1] + 2 * K[2] + K[3]) / 6
 			y += (L[0] + 2 * L[1] + 2 * L[2] + L[3]) / 6
 			x += this.h
@@ -514,6 +546,7 @@ export class Task1 {
 		yExact = this.solver.solve(this.exactTokens, this.x1, 0, 0)
 		res += `Answer: ${y}`
 		res += `\nRunge-Romberg Error: ${Runge.run(yExact, y, 4)}`
+
 		return [res, table]
 	}
 
@@ -522,6 +555,7 @@ export class Task1 {
 		res += '\n'
 
 		let k = 3
+
 		while (k < table[0].length - 1) {
 			table[2][k + 1] =
 				table[2][k] +
@@ -576,6 +610,7 @@ export class Task1 {
 			'ε(k)'
 		)
 		res += '\n'
+
 		for (let i = 0; i < table[0].length; i++) {
 			const f = this.solver.solve(
 				this.fTokens,
@@ -584,6 +619,7 @@ export class Task1 {
 				table[2][i]
 			)
 			const yExact1 = this.solver.solve(this.exactTokens, table[0][i], 0, 0)
+
 			res += this.printStringAdams(
 				i.toString(),
 				table[0][i].toFixed(4),
@@ -598,6 +634,7 @@ export class Task1 {
 		const yExact = this.solver.solve(this.exactTokens, this.x1, 0, 0)
 		res += `\nAnswer: ${y}`
 		res += `\nRunge-Romberg Error: ${Runge.run(yExact, y, 4)}`
+
 		return res
 	}
 
@@ -611,6 +648,7 @@ export class Task1 {
 		res += '\n\n'
 		res += this.adamsMethod(n, table)
 		res += '\n\n'
+
 		return res
 	}
 }

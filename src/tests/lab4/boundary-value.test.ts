@@ -6,6 +6,7 @@ class Solver {
 
 	public solve(f: Token[], x1: number, x2: number, x3: number): number {
 		const stack: number[] = []
+
 		for (const token of f) {
 			if (token.type === TokenType.Number && token.valueAsDouble) {
 				stack.push(token.valueAsDouble)
@@ -20,6 +21,7 @@ class Solver {
 			} else if (token.type === TokenType.Function) {
 				let funcRes = 0
 				const tmp = stack.pop()!
+
 				switch (token.value) {
 					case 'sqrt':
 						if (tmp < 0) return 0
@@ -53,10 +55,12 @@ class Solver {
 						funcRes = Math.exp(tmp)
 						break
 				}
+
 				stack.push(funcRes)
 			} else if (token.type === TokenType.Operator) {
 				const tmp2 = stack.pop()!
 				const tmp1 = stack.pop()!
+
 				switch (token.value) {
 					case '+':
 						stack.push(tmp1 + tmp2)
@@ -77,9 +81,11 @@ class Solver {
 				}
 			} else if (token.type === TokenType.UnaryOperator) {
 				let tmp = stack.pop()!
+
 				if (token.value === '-') {
 					tmp *= -1
 				}
+
 				stack.push(tmp)
 			}
 		}
@@ -89,6 +95,7 @@ class Solver {
 	public getConstraints(tokens: Token[]): number[] {
 		const constraints: number[] = [0, 0, 0]
 		const stack: Token[] = []
+
 		for (const token of tokens) {
 			if (
 				token.type === TokenType.Variable ||
@@ -98,12 +105,14 @@ class Solver {
 			} else if (token.type === TokenType.Operator) {
 				if (token.value === '=') {
 					const c = stack.pop()!.valueAsDouble
+
 					if (c) {
 						constraints[2] = c
 					}
 
 					if (stack.length !== 0) {
 						const rank = stack.pop()!
+
 						if (rank.value === 'y') {
 							constraints[0] = 1
 						} else {
@@ -112,6 +121,7 @@ class Solver {
 					}
 				} else if (token.value === '*') {
 					stack.pop()
+
 					const rank = stack.pop()!
 					const constr = stack.pop()!.valueAsDouble
 
@@ -127,6 +137,7 @@ class Solver {
 				} else if (token.value === '-' || token.value === '+') {
 					const rank = stack.pop()!
 					stack.pop()
+
 					if (rank.type === TokenType.Variable) {
 						if (token.value === '-') {
 							if (rank.value === 'y') {
@@ -145,10 +156,12 @@ class Solver {
 				}
 			} else if (token.type === TokenType.UnaryOperator) {
 				const tmp = stack.pop()!
+
 				if (token.value === '-' && tmp.valueAsDouble) {
 					tmp.value = token.value + tmp.value
 					tmp.valueAsDouble *= -1
 				}
+
 				stack.push(tmp)
 			}
 		}
@@ -170,6 +183,7 @@ class Lexer {
 
 			if (this.isDigit(current) || current === '.') {
 				const number = this.parseNumber(input, position)
+
 				tokens.push(new Token(TokenType.Number, number.value))
 				position = number.position
 				expectUnary = false
@@ -179,6 +193,7 @@ class Lexer {
 				} else {
 					tokens.push(new Token(TokenType.Operator, current))
 				}
+
 				position++
 				expectUnary = true
 			} else if (this.isLetter(current)) {
@@ -214,12 +229,14 @@ class Lexer {
 		position: number
 	): { value: string; position: number } {
 		const start = position
+
 		while (
 			position < input.length &&
 			(this.isDigit(input[position]) || input[position] === ',')
 		) {
 			position++
 		}
+
 		return { value: input.substring(start, position), position: position }
 	}
 
@@ -228,6 +245,7 @@ class Lexer {
 		position: number
 	): { value: string; position: number } {
 		const start = position
+
 		while (
 			position < input.length &&
 			(this.isLetter(input[position]) ||
@@ -236,6 +254,7 @@ class Lexer {
 		) {
 			position++
 		}
+
 		return { value: input.substring(start, position), position: position }
 	}
 
@@ -251,11 +270,13 @@ class Lexer {
 			'arcsin',
 			'arccos',
 		]
+
 		return functions.includes(word)
 	}
 
 	private isParameter(word: string): boolean {
 		const parameters = ['a']
+
 		return parameters.includes(word)
 	}
 
@@ -326,11 +347,13 @@ export class Task2 {
 		phietaj: string
 	): string {
 		const pad = 20
+
 		return `${j.padEnd(pad)}${etaj.padEnd(pad)}${phietaj.padEnd(pad)}\n`
 	}
 
 	private printStringFinite(k: string, xk: string, yk: string): string {
 		const pad = 20
+
 		return `${k.padEnd(pad)}${xk.padEnd(pad)}${yk.padEnd(pad)}\n`
 	}
 
@@ -342,6 +365,7 @@ export class Task2 {
 		p: number
 	): number {
 		const k = h2 / h1
+
 		return (i1 - i2) / (Math.pow(k, p) - 1)
 	}
 
@@ -352,6 +376,7 @@ export class Task2 {
 		addY: number
 	): number[] {
 		const res = [x + addX]
+
 		return res.concat(y.map(val => val + addY))
 	}
 
@@ -367,20 +392,26 @@ export class Task2 {
 			const y = res.map(list => list[list.length - 1])
 
 			const K: number[] = new Array(Task2.p + 1).fill(0)
+
 			for (let idx = 0; idx < n; idx++) {
 				if (idx === 0) {
 					K[1] = h * this.dy1(this.makeArgs(x, y, 0, 0))
 				} else {
 					const args = this.makeArgs(x, y, 0, 0)
+
 					K[1] = h * this.solver.solve(this.fTokens, args[0], args[1], args[2])
 				}
+
 				for (let i = 2; i <= Task2.p; i++) {
 					let add = 0
+
 					for (let j = 1; j <= i - 1; j++) add += this.b[i][j] * K[j]
+
 					if (idx === 0) {
 						K[i] = h * this.dy1(this.makeArgs(x, y, this.a[i] * h, add))
 					} else {
 						const args = this.makeArgs(x, y, this.a[i] * h, add)
+
 						K[i] =
 							h * this.solver.solve(this.fTokens, args[0], args[1], args[2])
 					}
@@ -392,6 +423,7 @@ export class Task2 {
 				res[idx].push(res[idx][res[idx].length - 1] + delta)
 			}
 		}
+
 		return res
 	}
 
@@ -413,6 +445,7 @@ export class Task2 {
 					: [ya / alpha[0], eta]
 
 			const yk = this.rungeKutta(args, a, b, h)
+
 			return (
 				alpha[1] * yk[0][yk[0].length - 1] +
 				beta[1] * yk[1][yk[1].length - 1] -
@@ -428,8 +461,11 @@ export class Task2 {
 
 		while (true) {
 			n = n1 - ((n1 - n0) / (phi1 - phi0)) * phi1
+
 			const phij = phi(n)
+
 			if (Math.abs(phij) < eps) break
+
 			n0 = n1
 			n1 = n
 			phi0 = phi1
@@ -456,15 +492,18 @@ export class Task2 {
 		B.set(0, _h * this.c0[2])
 
 		let x = this.x0 + _h
+
 		for (let i = 1; i < n; i++) {
 			const pValue = this.solver.solve(this.pTokens, x, 0, 0)
 			const qValue = this.solver.solve(this.qTokens, x, 0, 0)
+
 			A.set(i, i + 1, 1 + (pValue * _h) / 2)
 			A.set(i, i, -2 + _h * _h * qValue)
 			A.set(i, i - 1, 1 - (pValue * _h) / 2)
 			B.set(i, 0)
 			x += _h
 		}
+
 		A.set(n, n - 1, -this.c1[1])
 		A.set(n, n, this.c0[1] * _h + this.c1[1])
 		B.set(n, _h * this.c1[2])
@@ -490,6 +529,7 @@ export class Task2 {
 
 		res += this.printStringShooting('k', 'x(x)', 'y(k)')
 		let xk = this.x0
+
 		for (let i = 0; i < y1.length; i++) {
 			res += this.printStringShooting(
 				i.toString(),
