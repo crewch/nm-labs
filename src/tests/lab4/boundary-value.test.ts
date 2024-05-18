@@ -457,10 +457,12 @@ export class Task2 {
 
 		let x = this.x0 + _h
 		for (let i = 1; i < n; i++) {
-			A.set(i, i + 1, 1 + (this.solver.solve(this.pTokens, x, 0, 0) * _h) / 2)
-			A.set(i, i, -2 + _h * _h * this.solver.solve(this.qTokens, x, 0, 0))
-			A.set(i, i - 1, 1 - (this.solver.solve(this.pTokens, x, 0, 0) * _h) / 2)
-			B.set(i, _h * _h * 0)
+			const pValue = this.solver.solve(this.pTokens, x, 0, 0)
+			const qValue = this.solver.solve(this.qTokens, x, 0, 0)
+			A.set(i, i + 1, 1 + (pValue * _h) / 2)
+			A.set(i, i, -2 + _h * _h * qValue)
+			A.set(i, i - 1, 1 - (pValue * _h) / 2)
+			B.set(i, 0)
 			x += _h
 		}
 		A.set(n, n - 1, -this.c1[1])

@@ -27,7 +27,7 @@ const MainPage = () => {
 		const testX = { x0: 1, x1: 3 }
 		const testY = {
 			y0: "1 * y'(1) = 0",
-			y1: "1 * y(3) - 1 * y'(3) = 3,44444444",
+			y1: "1 * y(3) - 1 * y'(3) = 3,4444444",
 		}
 		const testExact = '1 + x + (1 / x)'
 		const testH = 0.1

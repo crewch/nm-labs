@@ -21,7 +21,7 @@ export class Token {
 		this.priority = this.calculatePriority()
 
 		if (type === TokenType.Number) {
-			this.valueAsDouble = parseFloat(value)
+			this.valueAsDouble = parseFloat(value.replace(',', '.'))
 		}
 	}
 
