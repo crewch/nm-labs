@@ -471,7 +471,7 @@ export class Task2 {
 			phi0 = phi1
 			phi1 = phij
 		}
-
+		// todo сделать графики
 		const args2 =
 			Math.abs(beta[0]) > eps
 				? [n, (ya - alpha[0] * n) / beta[0]]
@@ -496,6 +496,7 @@ export class Task2 {
 		for (let i = 1; i < n; i++) {
 			const pValue = this.solver.solve(this.pTokens, x, 0, 0)
 			const qValue = this.solver.solve(this.qTokens, x, 0, 0)
+			console.log(this.solver.solve(this.exactTokens, x, 0, 0))
 
 			A.set(i, i + 1, 1 + (pValue * _h) / 2)
 			A.set(i, i, -2 + _h * _h * qValue)
