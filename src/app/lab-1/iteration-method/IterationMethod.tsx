@@ -2,8 +2,6 @@
 
 import { Button } from '@/components/ui/button'
 import {
-	IMatrix,
-	IVector,
 	MatrixContext,
 	VectorContext,
 } from '@/context/MatrixAndVectorContextProvider'
@@ -25,8 +23,8 @@ const IterationMethod = () => {
 	const { vector, setVector } = useContext(VectorContext)
 	const { params, setParams } = useContext(ParamsContext)
 	const [answer, setAnswer] = useState<{
-		alpha: IMatrix
-		beta: IVector
+		alpha: number[][]
+		beta: number[]
 		normAlpha: number
 		epsilon: number
 		condition: boolean

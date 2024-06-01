@@ -1,11 +1,10 @@
 import Vector from '@/components/Vector'
-import { IVector } from '@/context/MatrixAndVectorContextProvider'
 import { memo } from 'react'
 
 interface IAnswer {
-	x: IVector
-	p: IVector
-	q: IVector
+	x: number[]
+	p: number[]
+	q: number[]
 }
 
 const Answer = ({ answer }: { answer: IAnswer }) => {

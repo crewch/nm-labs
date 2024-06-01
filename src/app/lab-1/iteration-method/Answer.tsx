@@ -1,11 +1,10 @@
 import Matrix from '@/components/Matrix'
 import Vector from '@/components/Vector'
-import { IMatrix, IVector } from '@/context/MatrixAndVectorContextProvider'
 import { memo } from 'react'
 
 interface IAnswer {
-	alpha: IMatrix
-	beta: IVector
+	alpha: number[][]
+	beta: number[]
 	normAlpha: number
 	epsilon: number
 	condition: boolean

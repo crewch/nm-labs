@@ -1,17 +1,16 @@
 import Matrix from '@/components/Matrix'
 import Vector from '@/components/Vector'
-import { IMatrix, IVector } from '@/context/MatrixAndVectorContextProvider'
 import { memo } from 'react'
 
 interface IAnswer {
-	B: IMatrix
-	C: IMatrix
-	alpha: IMatrix
+	B: number[][]
+	C: number[][]
+	alpha: number[][]
 	normAlpha: number
-	beta: IVector
-	gamma: IVector
+	beta: number[]
+	gamma: number[]
 	epsilon: number
-	x: IVector
+	x: number[]
 	iterations: number
 	iterationDetails: string[]
 	aPrioriEstimate: number

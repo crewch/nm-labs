@@ -2,8 +2,6 @@
 
 import { Button } from '@/components/ui/button'
 import {
-	IMatrix,
-	IVector,
 	MatrixContext,
 	VectorContext,
 } from '@/context/MatrixAndVectorContextProvider'
@@ -20,9 +18,9 @@ const RotationMethod = () => {
 	const { matrix, setMatrix } = useContext(MatrixContext)
 	const { vector, setVector } = useContext(VectorContext)
 	const { params, setParams } = useContext(ParamsContext)
-	const [answer, setAnswer] = useState<(IMatrix | IVector | string)[] | null>(
-		null
-	)
+	const [answer, setAnswer] = useState<
+		(number[][] | number[] | string)[] | null
+	>(null)
 
 	const handleSolve = () => {
 		const { A } = {

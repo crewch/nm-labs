@@ -1,4 +1,3 @@
-import { IVector, IVectorStr } from '@/context/MatrixAndVectorContextProvider'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
 
@@ -6,7 +5,7 @@ const Vector = ({
 	vector,
 	label,
 }: {
-	vector: IVector | IVectorStr
+	vector: number[] | string[]
 	label?: string
 }) => {
 	return (

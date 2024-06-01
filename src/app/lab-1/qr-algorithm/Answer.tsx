@@ -1,19 +1,14 @@
 import Matrix from '@/components/Matrix'
 import Vector from '@/components/Vector'
-import {
-	IMatrix,
-	IVector,
-	IVectorStr,
-} from '@/context/MatrixAndVectorContextProvider'
 import { memo } from 'react'
 
 interface IAnswer {
-	answer: (string | IMatrix | IVector | IVectorStr)[]
+	answer: (string | number[][] | number[] | string[])[]
 }
 
 function isVector(
-	value: IVector | IVectorStr | IMatrix
-): value is IVector | IVectorStr {
+	value: number[] | string[] | number[][]
+): value is number[] | string[] {
 	return (
 		Array.isArray(value) &&
 		(typeof value[0] === 'number' || typeof value[0] === 'string')

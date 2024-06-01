@@ -5,12 +5,11 @@ import { Label } from '@/components/ui/label'
 import {
 	MatrixContext,
 	VectorContext,
-	IVectorStr,
 } from '@/context/MatrixAndVectorContextProvider'
 import { ParamsContext } from '@/context/ParamsContextProvider'
 import { useContext, useEffect } from 'react'
 
-const generateColumnHeaders = (n: number): IVectorStr => {
+const generateColumnHeaders = (n: number): string[] => {
 	return Array.from({ length: n }, (_, i) => `A${i + 1}`)
 }
 

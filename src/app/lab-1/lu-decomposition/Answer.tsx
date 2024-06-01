@@ -2,17 +2,16 @@
 
 import Matrix from '@/components/Matrix'
 import Vector from '@/components/Vector'
-import { IMatrix, IVector } from '@/context/MatrixAndVectorContextProvider'
 import { memo } from 'react'
 
 interface IAnswer {
 	det: number
-	inverse: IMatrix
-	L: IMatrix
-	U: IMatrix
-	LUProduct: IMatrix
-	z: IVector
-	x: IVector
+	inverse: number[][]
+	L: number[][]
+	U: number[][]
+	LUProduct: number[][]
+	z: number[]
+	x: number[]
 }
 
 const Answer = ({ answer }: { answer: IAnswer }) => {

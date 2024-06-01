@@ -1,17 +1,16 @@
 import Matrix from '@/components/Matrix'
 import Vector from '@/components/Vector'
-import { IMatrix, IVector } from '@/context/MatrixAndVectorContextProvider'
 import { memo } from 'react'
 
 interface IAnswer {
-	answer: (IMatrix | IVector | string)[]
+	answer: (number[][] | number[] | string)[]
 }
 
-function isMatrix(value: IMatrix | IVector): value is IMatrix {
+function isMatrix(value: number[][] | number[]): value is number[][] {
 	return Array.isArray(value) && Array.isArray(value[0])
 }
 
-function isVector(value: IVector): value is IVector {
+function isVector(value: number[]): value is number[] {
 	return Array.isArray(value) && typeof value[0] === 'number'
 }
 

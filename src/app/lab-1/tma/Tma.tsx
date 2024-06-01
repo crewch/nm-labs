@@ -2,7 +2,6 @@
 
 import { Button } from '@/components/ui/button'
 import {
-	IVector,
 	MatrixContext,
 	VectorContext,
 } from '@/context/MatrixAndVectorContextProvider'
@@ -23,9 +22,9 @@ const Tma = () => {
 	const { vector, setVector } = useContext(VectorContext)
 	const { params, setParams } = useContext(ParamsContext)
 	const [answer, setAnswer] = useState<{
-		x: IVector
-		p: IVector
-		q: IVector
+		x: number[]
+		p: number[]
+		q: number[]
 	} | null>(null)
 
 	const handleSolve = () => {

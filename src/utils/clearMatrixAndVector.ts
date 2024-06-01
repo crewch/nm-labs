@@ -1,6 +1,4 @@
 import {
-	IMatrixStr,
-	IVectorStr,
 	createInitialMatrix,
 	createInitialVector,
 } from '@/context/MatrixAndVectorContextProvider'
@@ -13,9 +11,9 @@ export const clearMatrixAndVector = ({
 	setVector,
 }: {
 	matrixSize: number
-	setMatrix: Dispatch<SetStateAction<IMatrixStr>>
+	setMatrix: Dispatch<SetStateAction<string[][]>>
 	vectorSize: number
-	setVector: Dispatch<SetStateAction<IVectorStr>>
+	setVector: Dispatch<SetStateAction<string[]>>
 }) => {
 	setMatrix(createInitialMatrix(matrixSize))
 	setVector(createInitialVector(vectorSize))

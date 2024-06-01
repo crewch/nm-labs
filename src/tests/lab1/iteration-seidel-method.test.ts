@@ -1,4 +1,5 @@
-import { IMatrix, IVector } from '@/context/MatrixAndVectorContextProvider'
+type IMatrix = number[][]
+type IVector = number[]
 
 export const iterationSeidelTest = () => {
 	const A: IMatrix = [

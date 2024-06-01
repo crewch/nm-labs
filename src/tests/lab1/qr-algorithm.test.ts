@@ -1,8 +1,5 @@
-import {
-	IMatrix,
-	IVector,
-	IVectorStr,
-} from '@/context/MatrixAndVectorContextProvider'
+type IMatrix = number[][]
+type IVector = number[]
 
 export const qrTest = () => {
 	const A: IMatrix = [
@@ -155,7 +152,7 @@ export function runQRAlgorithm(A: IMatrix, epsilon: number) {
 	// Флаг для определения сходимости
 	let flag: boolean
 	// Строка для хранения результатов
-	let res: (string | IMatrix | IVector | IVectorStr)[] = []
+	let res: (string | IMatrix | IVector | string[])[] = []
 
 	// Цикл, выполняющийся до сходимости
 	do {
@@ -224,7 +221,7 @@ export function runQRAlgorithm(A: IMatrix, epsilon: number) {
 
 	// Добавление в результат списка собственных значений
 	res.push('Eigenvalues:')
-	const eigenvalueAns: IVectorStr = []
+	const eigenvalueAns: string[] = []
 	for (const eigenvalue of prev) {
 		eigenvalueAns.push(complexToString(eigenvalue))
 	}

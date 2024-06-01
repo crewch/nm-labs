@@ -1,8 +1,7 @@
-import { IMatrix } from '@/context/MatrixAndVectorContextProvider'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
 
-const Matrix = ({ matrix, label }: { matrix: IMatrix; label?: string }) => {
+const Matrix = ({ matrix, label }: { matrix: number[][]; label?: string }) => {
 	return (
 		<div>
 			{label && <Label>{label}</Label>}

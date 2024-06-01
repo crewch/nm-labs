@@ -2,8 +2,6 @@
 
 import { Button } from '@/components/ui/button'
 import {
-	IMatrix,
-	IVector,
 	MatrixContext,
 	VectorContext,
 } from '@/context/MatrixAndVectorContextProvider'
@@ -25,14 +23,14 @@ const SeidelMethod = () => {
 	const { vector, setVector } = useContext(VectorContext)
 	const { params, setParams } = useContext(ParamsContext)
 	const [answer, setAnswer] = useState<{
-		B: IMatrix
-		C: IMatrix
-		alpha: IMatrix
+		B: number[][]
+		C: number[][]
+		alpha: number[][]
 		normAlpha: number
 		beta: any[]
-		gamma: IVector
+		gamma: number[]
 		epsilon: number
-		x: IVector
+		x: number[]
 		iterations: number
 		iterationDetails: string[]
 		aPrioriEstimate: number
