@@ -1,26 +1,25 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import {
-	MatrixContext,
-	VectorContext,
-} from '@/context/MatrixAndVectorContextProvider'
-import { ParamsContext } from '@/context/ParamsContextProvider'
 import { thomasAlgorithm, tmaTest } from '@/tests/lab1/tma.test'
 import { clearMatrixAndVector } from '@/utils/clearMatrixAndVector'
 import { matrixToMatrixNum } from '@/utils/matrixToMatrixNum'
 import { matrixToMatrixStr } from '@/utils/matrixToMatrixStr'
 import { vectorToVectorNum } from '@/utils/vectorToVectorNum'
 import { vectorToVectorStr } from '@/utils/vectorToVectorStr'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import Answer from './Answer'
 import { Matrix } from '@/tests/lib/Matrix'
 import { Vector } from '@/tests/lib/Vector'
+import { useVariables, useWorkplaceParams } from '../(store)/store'
 
 const Tma = () => {
-	const { matrix, setMatrix } = useContext(MatrixContext)
-	const { vector, setVector } = useContext(VectorContext)
-	const { params, setParams } = useContext(ParamsContext)
+	const {
+		variables: { matrix, vector },
+		setMatrix,
+		setVector,
+	} = useVariables()
+	const { changeN } = useWorkplaceParams()
 	const [answer, setAnswer] = useState<{
 		x: number[]
 		p: number[]
@@ -40,7 +39,7 @@ const Tma = () => {
 	}
 
 	const handleTest = () => {
-		setParams({ ...params, n: '5' })
+		changeN('5')
 
 		const { A, B } = tmaTest()
 		setMatrix(matrixToMatrixStr(A))

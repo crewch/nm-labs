@@ -1,23 +1,23 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import {
-	MatrixContext,
-	VectorContext,
-} from '@/context/MatrixAndVectorContextProvider'
+
 import { clearMatrixAndVector } from '@/utils/clearMatrixAndVector'
 import { matrixToMatrixNum } from '@/utils/matrixToMatrixNum'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import Answer from './Answer'
 import { matrixToMatrixStr } from '@/utils/matrixToMatrixStr'
 import { vectorToVectorStr } from '@/utils/vectorToVectorStr'
-import { ParamsContext } from '@/context/ParamsContextProvider'
 import { jacobiMethod, rotationTest } from '@/tests/lab1/rotation-method.test'
+import { useVariables, useWorkplaceParams } from '../(store)/store'
 
 const RotationMethod = () => {
-	const { matrix, setMatrix } = useContext(MatrixContext)
-	const { vector, setVector } = useContext(VectorContext)
-	const { params, setParams } = useContext(ParamsContext)
+	const {
+		variables: { matrix, vector },
+		setMatrix,
+		setVector,
+	} = useVariables()
+	const { params, changeN } = useWorkplaceParams()
 	const [answer, setAnswer] = useState<
 		(number[][] | number[] | string)[] | null
 	>(null)
@@ -32,7 +32,7 @@ const RotationMethod = () => {
 	}
 
 	const handleTest = () => {
-		setParams({ ...params, n: '3' })
+		changeN('3')
 		const { A, B } = rotationTest()
 		setMatrix(matrixToMatrixStr(A))
 		setVector(vectorToVectorStr(B))

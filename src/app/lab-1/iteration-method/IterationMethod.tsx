@@ -2,26 +2,25 @@
 
 import { Button } from '@/components/ui/button'
 import {
-	MatrixContext,
-	VectorContext,
-} from '@/context/MatrixAndVectorContextProvider'
-import { ParamsContext } from '@/context/ParamsContextProvider'
-import {
 	iterationSeidelTest,
 	simpleIterationMethod,
 } from '@/tests/lab1/iteration-seidel-method.test'
 import { clearMatrixAndVector } from '@/utils/clearMatrixAndVector'
 import { matrixToMatrixNum } from '@/utils/matrixToMatrixNum'
 import { vectorToVectorNum } from '@/utils/vectorToVectorNum'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import Answer from './Answer'
 import { matrixToMatrixStr } from '@/utils/matrixToMatrixStr'
 import { vectorToVectorStr } from '@/utils/vectorToVectorStr'
+import { useVariables, useWorkplaceParams } from '../(store)/store'
 
 const IterationMethod = () => {
-	const { matrix, setMatrix } = useContext(MatrixContext)
-	const { vector, setVector } = useContext(VectorContext)
-	const { params, setParams } = useContext(ParamsContext)
+	const {
+		variables: { matrix, vector },
+		setMatrix,
+		setVector,
+	} = useVariables()
+	const { params, changeN } = useWorkplaceParams()
 	const [answer, setAnswer] = useState<{
 		alpha: number[][]
 		beta: number[]
@@ -48,7 +47,7 @@ const IterationMethod = () => {
 	}
 
 	const handleTest = () => {
-		setParams({ ...params, n: '4' })
+		changeN('4')
 		const { A, B } = iterationSeidelTest()
 		setMatrix(matrixToMatrixStr(A))
 		setVector(vectorToVectorStr(B))

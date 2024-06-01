@@ -1,23 +1,23 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import {
-	MatrixContext,
-	VectorContext,
-} from '@/context/MatrixAndVectorContextProvider'
-import { ParamsContext } from '@/context/ParamsContextProvider'
-import { useContext, useState } from 'react'
+
+import { useState } from 'react'
 import Answer from './Answer'
 import { clearMatrixAndVector } from '@/utils/clearMatrixAndVector'
 import { runQRAlgorithm, qrTest } from '@/tests/lab1/qr-algorithm.test'
 import { matrixToMatrixStr } from '@/utils/matrixToMatrixStr'
 import { vectorToVectorStr } from '@/utils/vectorToVectorStr'
 import { matrixToMatrixNum } from '@/utils/matrixToMatrixNum'
+import { useVariables, useWorkplaceParams } from '../(store)/store'
 
 const QrAlgorithm = () => {
-	const { matrix, setMatrix } = useContext(MatrixContext)
-	const { vector, setVector } = useContext(VectorContext)
-	const { params, setParams } = useContext(ParamsContext)
+	const {
+		variables: { matrix, vector },
+		setMatrix,
+		setVector,
+	} = useVariables()
+	const { params, changeN } = useWorkplaceParams()
 	const [answer, setAnswer] = useState<{
 		answer: (string | number[][] | number[] | string[])[]
 	} | null>(null)
@@ -30,7 +30,7 @@ const QrAlgorithm = () => {
 	}
 
 	const handleTest = () => {
-		setParams({ ...params, n: '3' })
+		changeN('3')
 		const { A, B } = qrTest()
 		setMatrix(matrixToMatrixStr(A))
 		setVector(vectorToVectorStr(B))

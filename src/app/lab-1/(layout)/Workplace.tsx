@@ -2,21 +2,20 @@
 
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import {
-	MatrixContext,
-	VectorContext,
-} from '@/context/MatrixAndVectorContextProvider'
-import { ParamsContext } from '@/context/ParamsContextProvider'
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
+import { useVariables, useWorkplaceParams } from '../(store)/store'
 
 const generateColumnHeaders = (n: number): string[] => {
 	return Array.from({ length: n }, (_, i) => `A${i + 1}`)
 }
 
 const Workplace = () => {
-	const { params, setParams } = useContext(ParamsContext)
-	const { matrix, setMatrix } = useContext(MatrixContext)
-	const { vector, setVector } = useContext(VectorContext)
+	const { changeEps, changeN, params } = useWorkplaceParams()
+	const {
+		variables: { matrix, vector },
+		setMatrix,
+		setVector,
+	} = useVariables()
 
 	const columnHeaders = generateColumnHeaders(+params.n)
 
@@ -34,18 +33,15 @@ const Workplace = () => {
 
 	useEffect(() => {
 		const updateMatrixSize = (newSize: number) => {
-			setMatrix(prevMatrix => {
-				const newMatrix = Array(newSize)
+			setMatrix(
+				Array(newSize)
 					.fill(null)
 					.map((_, i) =>
 						Array(newSize)
 							.fill(null)
-							.map((_, j) =>
-								prevMatrix[i] && prevMatrix[i][j] ? prevMatrix[i][j] : '0'
-							)
+							.map((_, j) => (matrix[i] && matrix[i][j] ? matrix[i][j] : '0'))
 					)
-				return newMatrix
-			})
+			)
 		}
 
 		const updateVectorSize = (newSize: number) => {
@@ -76,7 +72,7 @@ const Workplace = () => {
 					<Input
 						type='number'
 						value={`${params.n}`}
-						onChange={e => setParams({ ...params, n: e.target.value })}
+						onChange={e => changeN(e.target.value)}
 						onKeyDown={e => {
 							if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown')
 								e.preventDefault()
@@ -90,7 +86,7 @@ const Workplace = () => {
 					<Input
 						type='number'
 						value={`${params.eps}`}
-						onChange={e => setParams({ ...params, eps: e.target.value })}
+						onChange={e => changeEps(e.target.value)}
 						min={0}
 						max={1}
 						step={0.01}

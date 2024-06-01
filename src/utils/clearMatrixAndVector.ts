@@ -1,8 +1,12 @@
-import {
-	createInitialMatrix,
-	createInitialVector,
-} from '@/context/MatrixAndVectorContextProvider'
-import { Dispatch, SetStateAction } from 'react'
+export const createInitialMatrix = (size: number): string[][] => {
+	return Array.from({ length: size }, () =>
+		Array.from({ length: size }, () => '0')
+	)
+}
+
+export const createInitialVector = (size: number): string[] => {
+	return Array.from({ length: size }, () => '0')
+}
 
 export const clearMatrixAndVector = ({
 	matrixSize,
@@ -11,9 +15,9 @@ export const clearMatrixAndVector = ({
 	setVector,
 }: {
 	matrixSize: number
-	setMatrix: Dispatch<SetStateAction<string[][]>>
+	setMatrix: (matrix: string[][]) => void
 	vectorSize: number
-	setVector: Dispatch<SetStateAction<string[]>>
+	setVector: (vector: string[]) => void
 }) => {
 	setMatrix(createInitialMatrix(matrixSize))
 	setVector(createInitialVector(vectorSize))
