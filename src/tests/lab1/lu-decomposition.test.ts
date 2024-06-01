@@ -1,7 +1,5 @@
 import { IMatrix, IVector } from '@/context/MatrixAndVectorContextProvider'
 
-import { roundTo } from '@/utils/roundTo'
-
 export const luTest = () => {
 	const A: IMatrix = [
 		[-7, 3, -4, 7],
@@ -120,7 +118,7 @@ export function determinant(LU: IMatrix): number {
 		det *= LU[i][i]
 		// Вычисление детерминанта путем умножения диагональных элементов
 	}
-	return roundTo(det)
+	return +det.toFixed(4)
 	// Возврат округленного значения детерминанта
 }
 

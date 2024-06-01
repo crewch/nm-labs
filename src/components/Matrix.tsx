@@ -1,7 +1,6 @@
 import { IMatrix } from '@/context/MatrixAndVectorContextProvider'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
-import { roundTo } from '@/utils/roundTo'
 
 const Matrix = ({ matrix, label }: { matrix: IMatrix; label?: string }) => {
 	return (
@@ -13,7 +12,7 @@ const Matrix = ({ matrix, label }: { matrix: IMatrix; label?: string }) => {
 						{row.map((item, columnIndex) => (
 							<Input
 								className='w-24'
-								value={String(roundTo(item))}
+								value={item.toFixed(4)}
 								key={columnIndex}
 								readOnly
 							/>

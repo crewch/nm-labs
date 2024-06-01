@@ -1,7 +1,6 @@
 import { IVector, IVectorStr } from '@/context/MatrixAndVectorContextProvider'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
-import { roundTo } from '@/utils/roundTo'
 
 const Vector = ({
 	vector,
@@ -17,7 +16,7 @@ const Vector = ({
 				{vector.map((item, index) => (
 					<Input
 						className={item.toString().length > 8 ? 'w-36' : 'w-24'}
-						value={typeof item === 'string' ? item : String(roundTo(item))}
+						value={typeof item === 'string' ? item : item.toFixed(4)}
 						key={index}
 						readOnly
 					/>

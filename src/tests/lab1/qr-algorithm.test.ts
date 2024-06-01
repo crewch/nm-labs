@@ -3,7 +3,6 @@ import {
 	IVector,
 	IVectorStr,
 } from '@/context/MatrixAndVectorContextProvider'
-import { roundTo } from '@/utils/roundTo'
 
 export const qrTest = () => {
 	const A: IMatrix = [
@@ -140,8 +139,8 @@ function absComplex([a, b]: Complex): number {
 // Функция для преобразования комплексного числа в строку
 function complexToString([real, imag]: Complex): string {
 	// Возвращаем строку в зависимости от наличия мнимой части
-	if (imag === 0) return roundTo(real).toString()
-	return `${roundTo(real)} + ${roundTo(imag)}i`
+	if (imag === 0) return real.toFixed(4)
+	return `${real.toFixed(4)} + ${imag.toFixed(4)}i`
 }
 
 // Функция для выполнения QR-алгоритма
