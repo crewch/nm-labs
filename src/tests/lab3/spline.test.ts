@@ -1,5 +1,7 @@
 import { thomasAlgorithm } from '../lab1/tma.test'
-import { Matrix, Vector, Polynomial, CubicSpline } from '../lib/lib'
+import { Matrix } from '../lib/Matrix'
+import { Vector } from '../lib/Vector'
+import { Polynomial, CubicSpline } from '../lib/lib'
 
 export class Task2 {
 	private X: number[]

@@ -1,11 +1,5 @@
-import {
-	Lexer,
-	Solver,
-	Polynomial,
-	Matrix,
-	Parser,
-	Task1Args,
-} from '../lib/lib'
+import { Matrix } from '../lib/Matrix'
+import { Lexer, Solver, Polynomial, Parser, Task1Args } from '../lib/lib'
 
 const initializeTask = ({ y, x, xStar }: Task1Args) => {
 	const lexer = new Lexer()

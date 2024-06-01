@@ -1,16 +1,16 @@
+function f(x: number): number {
+	return Math.sin(x) - 2 * x ** 2 + 0.5
+}
+
+function df(x: number): number {
+	return Math.cos(x) - 4 * x
+}
+
+function sign(num: number): number {
+	return num >= 0 ? 1 : -1
+}
+
 export const lab21 = () => {
-	function f(x: number): number {
-		return Math.sin(x) - 2 * x ** 2 + 0.5
-	}
-
-	function df(x: number): number {
-		return Math.cos(x) - 4 * x
-	}
-
-	function sign(num: number): number {
-		return num >= 0 ? 1 : -1
-	}
-
 	// a и b из Desmos
 	const a: number = 0.3
 	const b: number = 1

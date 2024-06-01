@@ -1,5 +1,7 @@
 import { thomasAlgorithm } from '../lab1/tma.test'
-import { Matrix, Vector, Token, TokenType, Parser } from '../lib/lib'
+import { Matrix } from '../lib/Matrix'
+import { Vector } from '../lib/Vector'
+import { Token, TokenType, Parser } from '../lib/lib'
 
 class Solver {
 	constructor() {}

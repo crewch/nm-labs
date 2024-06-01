@@ -1,5 +1,4 @@
 import { IVector, IVectorStr } from '@/context/MatrixAndVectorContextProvider'
 
-export const vectorToVectorNum = (vector: IVectorStr): IVector => {
-	return vector.map(row => +row)
-}
+export const vectorToVectorNum = (vector: IVectorStr): IVector =>
+	vector.map(row => +row)

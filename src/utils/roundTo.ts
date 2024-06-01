@@ -1,3 +1,1 @@
-export const roundTo = (value: number): number => {
-	return parseFloat(value.toFixed(3))
-}
+export const roundTo = (value: number): number => parseFloat(value.toFixed(3))
