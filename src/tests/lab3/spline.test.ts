@@ -68,8 +68,7 @@ export class Task2 {
 			)
 		}
 
-		const { x } = thomasAlgorithm(A.getBuffer(), B.getBuffer())
-		const s = new Vector(x)
+		const s = thomasAlgorithm(A, B).x
 
 		for (let i = 1; i < n; i++) {
 			c.set(i, s.get(i - 1))

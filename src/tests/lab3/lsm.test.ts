@@ -47,9 +47,8 @@ export class Task3 {
 		const Y = new Vector(this.fX)
 		const Z = Matrix.multiplyMV(PhiT, Y)
 
-		const { LU, permutations } = luDecomposition(G.getBuffer())
-		const { x } = solveLU(LU, permutations, Z.getBuffer())
-		const ansV = new Vector(x)
+		const { LU, permutations } = luDecomposition(G)
+		const ansV = solveLU(LU, permutations, Z).x
 		const ansL = Array.from({ length: ansV.rows }).map((_, i) => ansV.get(i))
 
 		ansL.forEach((a, i) => {

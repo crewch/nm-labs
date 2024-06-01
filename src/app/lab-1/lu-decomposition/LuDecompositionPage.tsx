@@ -4,8 +4,6 @@ import { Button } from '@/components/ui/button'
 import {
 	MatrixContext,
 	VectorContext,
-	IMatrix,
-	IVector,
 } from '@/context/MatrixAndVectorContextProvider'
 import {
 	determinant,
@@ -24,6 +22,8 @@ import { vectorToVectorStr } from '@/utils/vectorToVectorStr'
 import { useContext, useState } from 'react'
 import Answer from './Answer'
 import { ParamsContext } from '@/context/ParamsContextProvider'
+import { Matrix } from '@/tests/lib/Matrix'
+import { Vector } from '@/tests/lib/Vector'
 
 const LuDecompositionPage = () => {
 	const { matrix, setMatrix } = useContext(MatrixContext)
@@ -31,12 +31,12 @@ const LuDecompositionPage = () => {
 	const { params, setParams } = useContext(ParamsContext)
 	const [answer, setAnswer] = useState<{
 		det: number
-		inverse: IMatrix
-		L: IMatrix
-		U: IMatrix
-		LUProduct: IMatrix
-		z: IVector
-		x: IVector
+		inverse: number[][]
+		L: number[][]
+		U: number[][]
+		LUProduct: number[][]
+		z: number[]
+		x: number[]
 	} | null>(null)
 
 	const handleSolve = () => {
@@ -44,21 +44,25 @@ const LuDecompositionPage = () => {
 			A: matrixToMatrixNum(matrix),
 			B: vectorToVectorNum(vector),
 		}
-		const { LU, permutations } = luDecomposition(A)
+		const matrixA = new Matrix()
+		matrixA.setBuffer(A)
+		const vectorB = new Vector(B)
+
+		const { LU, permutations } = luDecomposition(matrixA)
 		const { L, U } = separateLU(LU)
 		const LUProduct = multiplyMatrices(L, U)
-		const { x, z } = solveLU(LU, permutations, B)
+		const { x, z } = solveLU(LU, permutations, vectorB)
 		const det = determinant(LU)
 		const inverse = inverseMatrix(LU, permutations)
 
 		setAnswer({
 			det,
-			inverse,
-			L,
-			U,
-			LUProduct,
-			z,
-			x,
+			inverse: inverse.getBuffer(),
+			L: L.getBuffer(),
+			U: U.getBuffer(),
+			LUProduct: LUProduct.getBuffer(),
+			z: z.getBuffer(),
+			x: x.getBuffer(),
 		})
 	}
 
@@ -68,21 +72,26 @@ const LuDecompositionPage = () => {
 		const { A, B } = luTest()
 		setMatrix(matrixToMatrixStr(A))
 		setVector(vectorToVectorStr(B))
-		const { LU, permutations } = luDecomposition(A)
+
+		const matrixA = new Matrix()
+		matrixA.setBuffer(A)
+		const vectorB = new Vector(B)
+
+		const { LU, permutations } = luDecomposition(matrixA)
 		const { L, U } = separateLU(LU)
 		const LUProduct = multiplyMatrices(L, U)
-		const { x, z } = solveLU(LU, permutations, B)
+		const { x, z } = solveLU(LU, permutations, vectorB)
 		const det = determinant(LU)
 		const inverse = inverseMatrix(LU, permutations)
 
 		setAnswer({
 			det,
-			inverse,
-			L,
-			U,
-			LUProduct,
-			z,
-			x,
+			inverse: inverse.getBuffer(),
+			L: L.getBuffer(),
+			U: U.getBuffer(),
+			LUProduct: LUProduct.getBuffer(),
+			z: z.getBuffer(),
+			x: x.getBuffer(),
 		})
 	}
 

@@ -511,7 +511,7 @@ export class Task2 {
 		A.set(n, n, this.c0[1] * _h + this.c1[1])
 		B.set(n, _h * this.c1[2])
 
-		return new Vector(thomasAlgorithm(A.getBuffer(), B.getBuffer()).x)
+		return thomasAlgorithm(A, B).x
 	}
 
 	public run(): string {

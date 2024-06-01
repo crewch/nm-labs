@@ -1,194 +1,162 @@
-import { IMatrix, IVector } from '@/context/MatrixAndVectorContextProvider'
+import { Matrix } from '../lib/Matrix'
+import { Vector } from '../lib/Vector'
 
 export const luTest = () => {
-	const A: IMatrix = [
+	const A = [
 		[-7, 3, -4, 7],
 		[8, -1, -7, 6],
 		[9, 9, 3, -6],
 		[-7, -9, -8, -5],
 	]
 
-	const B: IVector = [-126, 29, 27, 34]
+	const B = [-126, 29, 27, 34]
 
 	return { A, B }
 }
 
-export function separateLU(LU: IMatrix): { L: IMatrix; U: IMatrix } {
-	// Экспорт функции для разделения LU-матрицы на L и U
-	const n = LU.length
-	// Получение размера матрицы
-	const L: IMatrix = Array.from({ length: n }, () => new Array(n).fill(0))
-	// Инициализация нижнетреугольной матрицы L
-	const U: IMatrix = Array.from({ length: n }, () => new Array(n).fill(0))
-	// Инициализация верхнетреугольной матрицы U
+export function separateLU(LU: Matrix): { L: Matrix; U: Matrix } {
+	const n = LU.rows
+	const L: number[][] = Array.from({ length: n }, () => new Array(n).fill(0))
+	const U: number[][] = Array.from({ length: n }, () => new Array(n).fill(0))
 
 	for (let i = 0; i < n; i++) {
 		for (let j = 0; j < n; j++) {
 			if (i > j) {
-				L[i][j] = LU[i][j]
-				// Заполнение нижнетреугольной матрицы L
+				L[i][j] = LU.get(i, j)
 			} else if (i === j) {
 				L[i][j] = 1
-				// Заполнение диагонали матрицы L единицами
-				U[i][j] = LU[i][j]
-				// Заполнение диагонали матрицы U
+				U[i][j] = LU.get(i, j)
 			} else {
-				U[i][j] = LU[i][j]
-				// Заполнение верхнетреугольной матрицы U
+				U[i][j] = LU.get(i, j)
 			}
 		}
 	}
 
-	return { L, U }
-	// Возврат матриц L и U
+	const matrixL = new Matrix()
+	matrixL.setBuffer(L)
+	const matrixU = new Matrix()
+	matrixU.setBuffer(U)
+
+	return { L: matrixL, U: matrixU }
 }
 
-export function multiplyMatrices(A: IMatrix, B: IMatrix): IMatrix {
-	// Экспорт функции для умножения матриц
-	const rowsA = A.length
-	// Получение количества строк матрицы A
-	const colsA = A[0].length
-	// Получение количества столбцов матрицы A
-	const rowsB = B.length
-	// Получение количества строк матрицы B
-	const colsB = B[0].length
-	// Получение количества столбцов матрицы B
-	const result: IMatrix = Array.from({ length: rowsA }, () =>
+export function multiplyMatrices(A: Matrix, B: Matrix): Matrix {
+	const rowsA = A.rows
+	const colsA = A.cols
+	const rowsB = B.rows
+	const colsB = B.cols
+	const result: number[][] = Array.from({ length: rowsA }, () =>
 		new Array(colsB).fill(0)
 	)
-	// Инициализация результирующей матрицы
 
 	if (colsA !== rowsB) {
 		throw new Error('Matrices are not multipliable')
-		// Проверка на возможность умножения матриц
 	}
 
 	for (let i = 0; i < rowsA; i++) {
 		for (let j = 0; j < colsB; j++) {
 			for (let k = 0; k < colsA; k++) {
-				result[i][j] += A[i][k] * B[k][j]
-				// Выполнение умножения матриц
+				result[i][j] += A.get(i, k) * B.get(k, j)
 			}
 			result[i][j] = result[i][j]
-			// Запись результата в результирующую матрицу
 		}
 	}
-	return result
-	// Возврат результирующей матрицы
+
+	const matrix = new Matrix()
+	matrix.setBuffer(result)
+
+	return matrix
 }
 
-export function solveLU(LU: IMatrix, permutations: number[], b: number[]) {
-	// Экспорт функции для решения системы уравнений с помощью LU-разложения
-	const n = LU.length
-	// Получение размера матрицы
-	const x: IVector = new Array(n).fill(0)
-	// Инициализация вектора решений x
-	const z: IVector = new Array(n).fill(0)
-	// Инициализация вспомогательного вектора z
+export function solveLU(LU: Matrix, permutations: number[], b: Vector) {
+	const n = LU.rows
+	const x: number[] = new Array(n).fill(0)
+	const z: number[] = new Array(n).fill(0)
 
 	for (let i = 0; i < n; i++) {
-		z[i] = b[permutations[i]]
-		// Применение перестановок к вектору b
+		z[i] = b.get(permutations[i])
 		for (let j = 0; j < i; j++) {
-			z[i] -= LU[i][j] * z[j]
-			// Вычисление вектора z
+			z[i] -= LU.get(i, j) * z[j]
 		}
 	}
 
 	for (let i = n - 1; i >= 0; i--) {
 		x[i] = z[i]
-		// Инициализация значения x
 		for (let j = i + 1; j < n; j++) {
-			x[i] -= LU[i][j] * x[j]
-			// Вычисление значения x
+			x[i] -= LU.get(i, j) * x[j]
 		}
-		x[i] = x[i] / LU[i][i]
-		// Деление на диагональный элемент
+		x[i] = x[i] / LU.get(i, i)
 	}
 
-	return { x, z }
-	// Возврат решения и вспомогательного вектора
+	return { x: new Vector(x), z: new Vector(z) }
 }
 
-export function determinant(LU: IMatrix): number {
-	// Экспорт функции для вычисления детерминанта матрицы
+export function determinant(LU: Matrix): number {
 	let det = 1
-	// Инициализация значения детерминанта
-	for (let i = 0; i < LU.length; i++) {
-		det *= LU[i][i]
-		// Вычисление детерминанта путем умножения диагональных элементов
+
+	for (let i = 0; i < LU.rows; i++) {
+		det *= LU.get(i, i)
 	}
+
 	return +det.toFixed(4)
-	// Возврат округленного значения детерминанта
 }
 
-export function inverseMatrix(LU: IMatrix, permutations: number[]): IMatrix {
-	// Экспорт функции для вычисления обратной матрицы
-	const n = LU.length
-	// Получение размера матрицы
-	const inverse = Array.from({ length: n }, () => new Array(n).fill(0))
-	// Инициализация обратной матрицы
+export function inverseMatrix(LU: Matrix, permutations: number[]) {
+	const n = LU.rows
+	const inverse: number[][] = Array.from({ length: n }, () =>
+		new Array(n).fill(0)
+	)
 
 	for (let col = 0; col < n; col++) {
-		const e = new Array(n).fill(0)
+		const e: number[] = new Array(n).fill(0)
 		e[col] = 1
-		// Инициализация единичного вектора
-		const { x: colSolutions } = solveLU(LU, permutations, e)
-		// Решение системы уравнений для каждого столбца единичной матрицы
+		const { x: colSolutions } = solveLU(LU, permutations, new Vector(e))
 
 		for (let row = 0; row < n; row++) {
-			inverse[row][col] = colSolutions[row]
-			// Заполнение обратной матрицы решениями
+			inverse[row][col] = colSolutions.get(row)
 		}
 	}
 
-	return inverse
-	// Возврат обратной матрицы
+	const newMatrix = new Matrix()
+	newMatrix.setBuffer(inverse)
+
+	return newMatrix
 }
 
-export function luDecomposition(A: IMatrix): {
-	LU: IMatrix
+export function luDecomposition(A: Matrix): {
+	LU: Matrix
 	permutations: number[]
 } {
-	// Экспорт функции для выполнения LU-разложения
-	const n = A.length
-	// Получение размера матрицы
-	const LU = A.map(row => [...row])
-	// Копирование матрицы A
+	const n = A.rows
+	const LU = A.getBuffer().map(row => [...row])
 	const permutations: number[] = Array.from({ length: n }, (_, i) => i)
-	// Инициализация массива перестановок
 
 	for (let col = 0; col < n; col++) {
 		let maxIdx = col
-		// Инициализация индекса максимального элемента
 		for (let row = col + 1; row < n; row++) {
 			if (Math.abs(LU[row][col]) > Math.abs(LU[maxIdx][col])) {
 				maxIdx = row
-				// Поиск максимального элемента в столбце
 			}
 		}
 		if (maxIdx !== col) {
 			;[LU[maxIdx], LU[col]] = [LU[col], LU[maxIdx]]
-			// Обмен строк местами
 			;[permutations[maxIdx], permutations[col]] = [
 				permutations[col],
 				permutations[maxIdx],
 			]
-			// Обмен перестановок местами
 		}
 
 		for (let row = col + 1; row < n; row++) {
 			const factor = LU[row][col] / LU[col][col]
-			// Вычисление множителя
 			LU[row][col] = factor
-			// Заполнение нижней части матрицы LU множителями
 			for (let j = col + 1; j < n; j++) {
 				LU[row][j] -= factor * LU[col][j]
-				// Выполнение преобразования строк
 			}
 		}
 	}
 
-	return { LU, permutations }
-	// Возврат LU-матрицы и массива перестановок
+	const matrixLU = new Matrix()
+	matrixLU.setBuffer(LU)
+
+	return { LU: matrixLU, permutations }
 }

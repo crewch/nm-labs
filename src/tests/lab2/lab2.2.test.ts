@@ -1,103 +1,4 @@
-import { IMatrix } from '@/context/MatrixAndVectorContextProvider'
-
-function multiplyMatrices(A: IMatrix, B: IMatrix): IMatrix {
-	const rowsA = A.length
-	const colsA = A[0].length
-	const rowsB = B.length
-	const colsB = B[0].length
-	const result: IMatrix = Array.from({ length: rowsA }, () =>
-		new Array(colsB).fill(0)
-	)
-
-	if (colsA !== rowsB) {
-		throw new Error('Matrices are not multipliable')
-	}
-
-	for (let i = 0; i < rowsA; i++) {
-		for (let j = 0; j < colsB; j++) {
-			for (let k = 0; k < colsA; k++) {
-				result[i][j] += A[i][k] * B[k][j]
-			}
-
-			result[i][j] = result[i][j]
-		}
-	}
-	return result
-}
-
-const createZeroMatrix = (rows: number, cols: number): IMatrix => {
-	return Array.from({ length: rows }, () => Array(cols).fill(0))
-}
-
-const createIdentityMatrix = (size: number): IMatrix => {
-	return createZeroMatrix(size, size).map((row, i) => {
-		row[i] = 1
-
-		return row
-	})
-}
-
-const duplicateMatrix = (A: IMatrix): IMatrix => {
-	return A.map(row => [...row])
-}
-
-const inverseMatrix = (A: IMatrix): IMatrix => {
-	let I = createIdentityMatrix(A.length),
-		C = duplicateMatrix(A)
-
-	for (let i = 0; i < A.length; i++) {
-		let e = C[i][i]
-
-		if (e === 0) {
-			for (let ii = i + 1; ii < A.length; ii++) {
-				if (C[ii][i] !== 0) {
-					let temp = C[i]
-					C[i] = C[ii]
-					C[ii] = temp
-					temp = I[i]
-					I[i] = I[ii]
-					I[ii] = temp
-					break
-				}
-			}
-
-			e = C[i][i]
-
-			if (e === 0) {
-				return []
-			}
-		}
-
-		for (let j = 0; j < A.length; j++) {
-			C[i][j] = C[i][j] / e
-			I[i][j] = I[i][j] / e
-		}
-
-		for (let ii = 0; ii < A.length; ii++) {
-			if (ii === i) {
-				continue
-			}
-
-			e = C[ii][i]
-
-			for (let j = 0; j < A.length; j++) {
-				C[ii][j] -= e * C[i][j]
-				I[ii][j] -= e * I[i][j]
-			}
-		}
-	}
-	return I
-}
-
-function matrixNorm(matrix: IMatrix): number {
-	return Math.max(
-		...matrix.map(row => row.reduce((sum, value) => sum + Math.abs(value), 0))
-	)
-}
-
-const subtractMatrices = (A: IMatrix, B: IMatrix): IMatrix => {
-	return A.map((row, i) => row.map((val, j) => val - B[i][j]))
-}
+import { Matrix } from '../lib/Matrix'
 
 const argMax = (
 	f: (x: number) => number,
@@ -215,36 +116,42 @@ export const lab22 = () => {
 		ans: '',
 	}
 
-	const next = (xk: IMatrix, T: IMatrix) => {
-		return subtractMatrices(
-			xk,
-			multiplyMatrices(T, [[f1(xk[0][0], xk[1][0])], [f2(xk[0][0], xk[1][0])]])
-		)
+	const next = (xk: Matrix, T: Matrix) => {
+		const matrix = new Matrix()
+		matrix.setBuffer([
+			[f1(xk.get(0, 0), xk.get(1, 0))],
+			[f2(xk.get(0, 0), xk.get(1, 0))],
+		])
+
+		return Matrix.subtractMatrices(xk, Matrix.multiplyMM(T, matrix))
 	}
 
 	x = (ax + bx) / 2
 	y = (ay + by) / 2
-	const x0: IMatrix = [[x], [y]]
-	const J: IMatrix = [
+	const x0 = new Matrix()
+	x0.setBuffer([[x], [y]])
+	const J = new Matrix()
+	J.setBuffer([
 		[dxf1(x), dyf1(y)],
 		[dxf2(x), dyf2(x)],
-	]
-	const T = inverseMatrix(J)
-	const phi = [
+	])
+	const T = Matrix.inverseMatrix(J)
+	const phi = new Matrix()
+	phi.setBuffer([
 		[argMax(dxf1, ax, bx), argMax(dyf1, ay, by)],
 		[argMax(dxf2, ax, bx), argMax(dyf2, ay, by)],
-	]
-	const Q: IMatrix = subtractMatrices(
-		createIdentityMatrix(2),
-		multiplyMatrices(T, phi)
+	])
+	const Q = Matrix.subtractMatrices(
+		Matrix.createIdentityMatrix(2),
+		Matrix.multiplyMM(T, phi)
 	)
 
-	const normQ = matrixNorm(Q)
+	const normQ = Q.norm()
 	let prev = x0
 	let curr = next(prev, T)
 	let iter = 0
 
-	const detJk = J[0][0] * J[1][1] - J[0][1] * J[1][0]
+	const detJk = J.get(0, 0) * J.get(1, 1) - J.get(0, 1) * J.get(1, 0)
 
 	const matrixA1k = [
 		[f1(x, y), dyf1(y)],
@@ -263,34 +170,40 @@ export const lab22 = () => {
 		matrixA2k[0][0] * matrixA2k[1][1] - matrixA2k[0][1] * matrixA2k[1][0]
 
 	iterRes.iterations.push(
-		`k=${iter}\tx_1=${curr[0][0].toFixed(4)}\tx_2=${curr[1][0].toFixed(
+		`k=${iter}\tx_1=${curr.get(0, 0).toFixed(4)}\tx_2=${curr
+			.get(1, 0)
+			.toFixed(4)}\tdxf1=${dxf1(x).toFixed(4)}\tdyf1=${dyf1(y).toFixed(
 			4
-		)}\tdxf1=${dxf1(x).toFixed(4)}\tdyf1=${dyf1(y).toFixed(4)}\tdxf2=${dxf2(
-			x
-		).toFixed(4)}\tdyf2=${dyf2(x).toFixed(4)}\tdetA1k=${detA1k.toFixed(
+		)}\tdxf2=${dxf2(x).toFixed(4)}\tdyf2=${dyf2(x).toFixed(
 			4
-		)}\tdetA2k=${detA2k.toFixed(4)}\tdetJk=${detJk.toFixed(4)}\n`
+		)}\tdetA1k=${detA1k.toFixed(4)}\tdetA2k=${detA2k.toFixed(
+			4
+		)}\tdetJk=${detJk.toFixed(4)}\n`
 	)
 
 	while (
-		(1 / Math.abs(1 - normQ)) * matrixNorm(subtractMatrices(curr, prev)) >
+		(1 / Math.abs(1 - normQ)) * Matrix.subtractMatrices(curr, prev).norm() >
 		epsilon
 	) {
 		prev = curr
 		curr = next(prev, T)
 		iter++
 		iterRes.iterations.push(
-			`k=${iter}\tx_1=${curr[0][0].toFixed(4)}\tx_2=${curr[1][0].toFixed(
+			`k=${iter}\tx_1=${curr.get(0, 0).toFixed(4)}\tx_2=${curr
+				.get(1, 0)
+				.toFixed(4)}\tdxf1=${dxf1(x).toFixed(4)}\tdyf1=${dyf1(y).toFixed(
 				4
-			)}\tdxf1=${dxf1(x).toFixed(4)}\tdyf1=${dyf1(y).toFixed(4)}\tdxf2=${dxf2(
-				x
-			).toFixed(4)}\tdyf2=${dyf2(x).toFixed(4)}\tdetA1k=${detA1k.toFixed(
+			)}\tdxf2=${dxf2(x).toFixed(4)}\tdyf2=${dyf2(x).toFixed(
 				4
-			)}\tdetA2k=${detA2k.toFixed(4)}\tdetJk=${detJk.toFixed(4)}\n`
+			)}\tdetA1k=${detA1k.toFixed(4)}\tdetA2k=${detA2k.toFixed(
+				4
+			)}\tdetJk=${detJk.toFixed(4)}\n`
 		)
 	}
 
-	iterRes.ans = `Answer x=${curr[0][0].toFixed(4)} y=${curr[1][0].toFixed(4)}`
+	iterRes.ans = `Answer x=${curr.get(0, 0).toFixed(4)} y=${curr
+		.get(1, 0)
+		.toFixed(4)}`
 
 	return { nmRes, iterRes }
 }

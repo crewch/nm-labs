@@ -154,13 +154,83 @@ export class Matrix {
 	}
 
 	public static subtractMatrices(A: Matrix, B: Matrix) {
-		return A.buffer.map((row, i) => row.map((val, j) => val - B.get(i, j)))
+		const matrix = new Matrix()
+		matrix.setBuffer(
+			A.buffer.map((row, i) => row.map((val, j) => val - B.get(i, j)))
+		)
+
+		return matrix
 	}
 
 	public duplicateMatrix = (A: Matrix): Matrix => {
-		const newMatrix = new Matrix()
-		newMatrix.setBuffer(A.buffer.map(row => [...row]))
+		const matrix = new Matrix()
+		matrix.setBuffer(A.buffer.map(row => [...row]))
 
-		return newMatrix
+		return matrix
+	}
+
+	public static inverseMatrix(A: Matrix): Matrix {
+		let I = this.createIdentityMatrix(A.rows).buffer
+		const C = A.clone().getBuffer()
+
+		for (let i = 0; i < A.rows; i++) {
+			let e = C[i][i]
+
+			if (e === 0) {
+				for (let ii = i + 1; ii < A.rows; ii++) {
+					if (C[ii][i] !== 0) {
+						let temp = C[i]
+						C[i] = C[ii]
+						C[ii] = temp
+						temp = I[i]
+						I[i] = I[ii]
+						I[ii] = temp
+						break
+					}
+				}
+
+				e = C[i][i]
+
+				if (e === 0) {
+					return new Matrix()
+				}
+			}
+
+			for (let j = 0; j < A.rows; j++) {
+				C[i][j] = C[i][j] / e
+				I[i][j] = I[i][j] / e
+			}
+
+			for (let ii = 0; ii < A.rows; ii++) {
+				if (ii === i) {
+					continue
+				}
+
+				e = C[ii][i]
+
+				for (let j = 0; j < A.rows; j++) {
+					C[ii][j] -= e * C[i][j]
+					I[ii][j] -= e * I[i][j]
+				}
+			}
+		}
+
+		const matrixI = new Matrix()
+		matrixI.setBuffer(I)
+
+		return matrixI
+	}
+
+	public static createIdentityMatrix(size: number): Matrix {
+		const matrix = new Matrix()
+		matrix.setBuffer(
+			Array.from({ length: size }, () => Array(size).fill(0)).map((row, i) => {
+				row[i] = 1
+
+				return row
+			})
+		)
+
+		return matrix
 	}
 }

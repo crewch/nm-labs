@@ -15,6 +15,8 @@ import { vectorToVectorNum } from '@/utils/vectorToVectorNum'
 import { vectorToVectorStr } from '@/utils/vectorToVectorStr'
 import { useContext, useState } from 'react'
 import Answer from './Answer'
+import { Matrix } from '@/tests/lib/Matrix'
+import { Vector } from '@/tests/lib/Vector'
 
 const Tma = () => {
 	const { matrix, setMatrix } = useContext(MatrixContext)
@@ -31,8 +33,11 @@ const Tma = () => {
 			A: matrixToMatrixNum(matrix),
 			B: vectorToVectorNum(vector),
 		}
-		const { x, p, q } = thomasAlgorithm(A, B)
-		setAnswer({ p, q, x })
+
+		const matrixA = new Matrix()
+		matrixA.setBuffer(A)
+		const { x, p, q } = thomasAlgorithm(matrixA, new Vector(B))
+		setAnswer({ p: p.getBuffer(), q: q.getBuffer(), x: x.getBuffer() })
 	}
 
 	const handleTest = () => {
@@ -41,8 +46,11 @@ const Tma = () => {
 		const { A, B } = tmaTest()
 		setMatrix(matrixToMatrixStr(A))
 		setVector(vectorToVectorStr(B))
-		const { x, p, q } = thomasAlgorithm(A, B)
-		setAnswer({ p, q, x })
+
+		const matrixA = new Matrix()
+		matrixA.setBuffer(A)
+		const { x, p, q } = thomasAlgorithm(matrixA, new Vector(B))
+		setAnswer({ p: p.getBuffer(), q: q.getBuffer(), x: x.getBuffer() })
 	}
 
 	const handleClear = () => {
