@@ -443,7 +443,7 @@ export class Task1 {
 		res += '\n'
 
 		const table: number[][] = [[], [], []]
-
+		// todo сделать графики
 		let x = this.x0
 		let y = this.solver.solve(this.y0Tokens, this.x0, 0, 0)
 		let z = this.solver.solve(this.z0Tokens, this.x0, 0, 0)
